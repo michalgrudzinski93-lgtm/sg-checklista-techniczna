@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SG — Wzorzec Checklisty dla IT</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e2e8f0;min-height:100vh}
+  input,textarea,select,button{font-family:inherit}
+
+  /* ── NAV ── */
+  .top-nav{background:#0d1b2a;border-bottom:2px solid #1e3a5f;padding:0;display:flex;overflow-x:auto;position:sticky;top:0;z-index:100}
+  .nav-btn{padding:14px 20px;font-size:13px;font-weight:600;color:#64748b;background:none;border:none;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .15s}
+  .nav-btn.active{color:#fff;border-bottom-color:#f97316;background:#1e293b20}
+  .nav-btn:hover:not(.active){color:#94a3b8;background:#ffffff08}
+
+  /* ── PAGE ── */
+  .page{display:none;min-height:calc(100vh - 50px)}
+  .page.active{display:block}
+
+  /* ── PHONE FRAME ── */
+  .frame{max-width:480px;margin:0 auto;padding:16px 12px 80px}
+
+  /* ── APP HEADER ── */
+  .app-header{background:#162032;border-radius:12px 12px 0 0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:0}
+  .app-title{font-size:16px;font-weight:700;color:#fff}
+  .status-btn{background:#1e3a5f;border:1px solid #2d5a8e;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer}
+
+  /* ── CARD ── */
+  .card{background:#162032;border-radius:0 0 12px 12px;padding:16px;margin-bottom:14px}
+  .card-mid{background:#162032;border-radius:12px;padding:16px;margin-bottom:14px}
+
+  /* ── DATE FIELD ── */
+  .date-field{background:#1e2d42;border:1px solid #2d4a6a;border-radius:8px;padding:10px 14px;color:#94a3b8;font-size:14px;width:60%;display:block;margin-bottom:4px}
+
+  /* ── SECTION HEADER ── */
+  .section-title{text-align:center;font-size:15px;font-weight:700;color:#fff;text-decoration:underline;text-underline-offset:4px;margin:18px 0 12px}
+
+  /* ── CHECKBOX GRID ── */
+  .check-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-bottom:6px}
+  .check-grid-1{display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
+  .check-item{display:flex;align-items:center;gap:10px;padding:6px 0}
+  .check-label{font-size:14px;color:#e2e8f0;flex:1;line-height:1.3}
+  .check-box{width:22px;height:22px;border:2px solid #3d5a7a;border-radius:4px;background:#1e2d42;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .check-box.checked{background:#2d6a4f;border-color:#4ade80}
+  .check-box.checked::after{content:'✓';color:#4ade80;font-size:13px;font-weight:700}
+  .check-box.alert{border-color:#ef4444}
+
+  /* ── INPUT FIELD ── */
+  .input-field{width:100%;background:#1e2d42;border:1px solid #2d4a6a;border-radius:8px;padding:10px 14px;color:#94a3b8;font-size:14px;margin-top:6px}
+  .input-field::placeholder{color:#4a6080}
+  .input-label{font-size:13px;color:#e2e8f0;margin-top:10px;display:block}
+
+  /* ── ALERT TAG ── */
+  .alert-tag{font-size:10px;color:#f87171;background:#450a0a;border:1px solid #991b1b;padding:1px 6px;border-radius:4px;margin-left:6px;font-weight:700;white-space:nowrap}
+
+  /* ── QUESTION BLOCK (raport brygadzisty) ── */
+  .question{margin-bottom:18px}
+  .q-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+  .q-num{font-size:14px;font-weight:700;color:#e2e8f0;flex-shrink:0}
+  .q-text{font-size:14px;font-weight:700;color:#e2e8f0;flex:1;line-height:1.4}
+  .q-checkbox{width:26px;height:26px;border:2px solid #3d5a7a;border-radius:5px;background:#1e2d42;flex-shrink:0;margin-top:2px;cursor:pointer}
+  .detail-label{font-size:12px;color:#64748b;margin-bottom:4px;padding-left:2px}
+  .detail-input{width:100%;background:#1e2d42;border:1px solid #2d4a6a;border-radius:8px;padding:10px 12px;color:#94a3b8;font-size:13px;margin-bottom:6px;min-height:70px;resize:none}
+  .time-row{display:flex;gap:8px;margin-top:6px}
+  .time-box{flex:1;background:#1e2d42;border:1px solid #2d4a6a;border-radius:8px;padding:10px;color:#94a3b8;font-size:14px;text-align:center}
+  .add-btn{width:100%;background:#00b4ab;border:none;border-radius:24px;padding:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px}
+
+  /* ── BOTTOM BUTTONS ── */
+  .bottom-row{display:flex;gap:12px;padding:16px 12px;position:sticky;bottom:0;background:#111827}
+  .btn-cancel{flex:1;background:#ef4444;border:none;border-radius:24px;padding:13px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-submit{flex:1;background:#22c55e;border:none;border-radius:24px;padding:13px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-dot{width:8px;height:8px;background:rgba(255,255,255,.6);border-radius:50%}
+
+  /* ── BACK BTN ── */
+  .back-btn{display:flex;align-items:center;gap:6px;color:#64748b;font-size:13px;font-weight:600;background:none;border:none;cursor:pointer;padding:8px 0;margin-bottom:8px}
+  .back-icon{width:22px;height:22px;background:#1e2d42;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+
+  /* ── LEGEND ── */
+  .legend{background:#162032;border-radius:12px;padding:14px;margin-bottom:14px;font-size:12px;color:#64748b;line-height:1.7}
+  .legend strong{color:#e2e8f0}
+  .legend .red{color:#f87171}
+  .legend .green{color:#4ade80}
+  .legend .yellow{color:#fbbf24}
+
+  /* ── CITY SELECTOR ── */
+  .city-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .city-tab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #2d4a6a;background:#1e2d42;color:#64748b;transition:all .15s}
+  .city-tab.active{border-color:#f97316;background:#431407;color:#fb923c}
+
+  /* PAGE TITLE */
+  .page-title{font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.08em;padding:12px 12px 4px;max-width:480px;margin:0 auto}
+
+  div.divider{height:1px;background:#1e2d42;margin:8px 0}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="top-nav">
+  <button class="nav-btn active" onclick="show('p-open')">☀️ Otwarcie</button>
+  <button class="nav-btn" onclick="show('p-close')">🌙 Zamknięcie</button>
+  <button class="nav-btn" onclick="show('p-brygad')">📋 Brygadzista</button>
+  <button class="nav-btn" onclick="show('p-legend')">ℹ️ Legenda</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 1 — CHECKLISTA OTWARCIA
+═══════════════════════════════════════════════ -->
+<div class="page active" id="p-open">
+  <div class="page-title">Wzorzec — Checklista Otwarcia</div>
+  <div class="frame">
+
+    <!-- Wybór lokalizacji -->
+    <div class="city-tabs">
+      <div class="city-tab active" onclick="switchCity(this,'Poznań')">Poznań</div>
+      <div class="city-tab" onclick="switchCity(this,'Łódź')">Łódź</div>
+      <div class="city-tab" onclick="switchCity(this,'Częstochowa')">Częstochowa</div>
+      <div class="city-tab" onclick="switchCity(this,'Warszawa')">Warszawa</div>
+    </div>
+
+    <!-- Header -->
+    <div class="app-header">
+      <div class="app-title">Check lista - otwarcia: <span id="cityName">Poznań</span></div>
+      <button class="status-btn">Ok?</button>
+    </div>
+    <div class="card">
+      <input type="text" class="date-field" value="29/04/2026" readonly>
+
+      <!-- SPRZĄTANIE -->
+      <div class="section-title">Sprzątanie ogólne</div>
+      <div class="check-grid">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wejście do parku:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wieża / poducha:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Open:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Siatkówka:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Koszykówka:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wsady do kosza:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Gladiator:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprzątanie śmieci:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto.:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Włączenie TV:</span></div>
+      </div>
+
+      <!-- NINJA -->
+      <div class="section-title">Ninja / Tor przeszkód</div>
+      <div class="check-grid">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ninja +1/+2/schody:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Dywany / podłoga:</span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pompowanie tracka: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie przeszkód: <span class="alert-tag">⚡ ALERT</span></span></div>
+      </div>
+      <div class="check-grid-1">
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie siatek na torze: <span class="alert-tag">⚡ ALERT</span></span></div>
+      </div>
+
+      <!-- HAPPY CLIMB (Poz/Łódź/Czewa) -->
+      <div class="section-title">Happy Climb <small style="font-size:11px;color:#64748b">(Poz / Łódź / Czewa)</small></div>
+      <div class="check-grid-1">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzanie strefy:</span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rozwinięcie liny asekuracyjnej w automacie: <span class="alert-tag">⚡ NATYCHMIAST</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie karabińczyków zatrzaskowych: <span class="alert-tag">⚡ NATYCHMIAST</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Test zapadki haka (otwieranie/zamykanie): <span class="alert-tag">⚡ NATYCHMIAST</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie działania automatu: <span class="alert-tag">⚡ NATYCHMIAST</span></span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Włączenie świateł Happy Climb:</span></div>
+      </div>
+
+      <!-- PODUSZKA -->
+      <div class="section-title">Poduszka / Airbag</div>
+
+      <!-- Poznań — 2 poduszki -->
+      <div id="pod-poznan">
+        <span class="input-label">Poduszka Wieża Duża — ciśnienie: <span class="alert-tag">⚡ ALERT</span></span>
+        <input type="number" class="input-field" placeholder="Wpisz tutaj (np. 196)">
+        <span class="input-label">Poduszka Wieża Mała — ciśnienie: <span class="alert-tag">⚡ ALERT</span></span>
+        <input type="number" class="input-field" placeholder="Wpisz tutaj">
+        <div class="check-grid-1" style="margin-top:8px">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Skok testowy z obu wież: <span class="alert-tag">⚡ ALERT</span></span></div>
+        </div>
+      </div>
+      <!-- Łódź — 2 poduszki inne -->
+      <div id="pod-lodz" style="display:none">
+        <span class="input-label">Poduszka Wieża Duża — ciśnienie: <span class="alert-tag">⚡ ALERT</span></span>
+        <input type="number" class="input-field" placeholder="Wpisz tutaj">
+        <span class="input-label">Poduszka Trampoliny Zeskokowe — ciśnienie: <span class="alert-tag">⚡ ALERT</span></span>
+        <input type="number" class="input-field" placeholder="Wpisz tutaj">
+        <div class="check-grid-1" style="margin-top:8px">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Skok testowy: <span class="alert-tag">⚡ ALERT</span></span></div>
+        </div>
+      </div>
+      <!-- Czewa / Wwa — 1 poduszka -->
+      <div id="pod-other" style="display:none">
+        <span class="input-label">Ciśnienie Poduszki: <span class="alert-tag">⚡ ALERT</span></span>
+        <input type="number" class="input-field" placeholder="Wpisz tutaj">
+        <div class="check-grid-1" style="margin-top:8px">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Skok testowy: <span class="alert-tag">⚡ ALERT</span></span></div>
+        </div>
+      </div>
+
+      <!-- OPEN -->
+      <div class="section-title">Open / Trampoliny</div>
+      <div class="check-grid-1">
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pompowanie air tracków: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie siatek strefy Open: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przetarcie ekranów:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie wałków Gladiatora:</span></div>
+      </div>
+
+      <!-- VALO JUMP — WSZYSTKIE -->
+      <div class="section-title">Valo Jump <small style="font-size:11px;color:#64748b">(wszystkie parki)</small></div>
+      <div class="check-grid-1">
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Jump — włączenie i sprawdzenie: <span class="alert-tag">⚡ ALERT</span></span></div>
+      </div>
+
+      <!-- VALO CLIMB — Poz/Łódź/Wwa -->
+      <div id="valo-climb-section">
+        <div class="section-title">Valo Climb <small style="font-size:11px;color:#64748b">(Poz / Łódź / Wwa)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Climb — włączenie i sprawdzenie: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wycieranie rzutnika Valo Climb:</span></div>
+        </div>
+      </div>
+
+      <!-- VALO ARENA — Łódź/Wwa -->
+      <div id="valo-arena-section" style="display:none">
+        <div class="section-title">Valo Arena <small style="font-size:11px;color:#64748b">(Łódź / Wwa)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Arena — włączenie i sprawdzenie: <span class="alert-tag">⚡ ALERT</span></span></div>
+        </div>
+      </div>
+
+      <!-- HOLO — Wwa only -->
+      <div id="holo-section" style="display:none">
+        <div class="section-title">HOLO System <small style="font-size:11px;color:#64748b">(tylko Warszawa)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">HOLO — włączenie (komputery, ekrany, pady, kamizelki): <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">HOLO — czyszczenie ekranów:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Włączenie ekranu z zasadami:</span></div>
+        </div>
+      </div>
+
+      <!-- ŚCIANA WSPINACZKOWA PROF — Wwa -->
+      <div id="scianka-wwa-section" style="display:none">
+        <div class="section-title">Ściana Wspinaczkowa Prof. <small style="font-size:11px;color:#64748b">(tylko Warszawa)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">iWall — włączenie i sprawdzenie:</span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Liny i automaty asekuracyjne: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Haki bezpieczeństwa: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Zapadka haka — test: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
+        </div>
+      </div>
+
+      <!-- GOKARTY — Poz/Łódź -->
+      <div id="gokarty-section">
+        <div class="section-title">Gokarty <small style="font-size:11px;color:#64748b">(Poz / Łódź)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Przejazd próbny: <span class="alert-tag">⚡ ALERT</span></span></div>
+        </div>
+        <span class="input-label">Ciśnienie w oponach: <span class="alert-tag">⚡ ALERT</span></span>
+        <input type="number" class="input-field" placeholder="Wpisz tutaj">
+        <div class="check-grid-1" style="margin-top:8px">
+          <div class="check-item">
+            <div class="check-box" onclick="toggle(this)"></div>
+            <span class="check-label">Stan akumulatorów:</span>
+            <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:6px;padding:4px 8px;font-size:13px;margin-left:8px">
+              <option>OK</option><option>Wymaga ładowania</option><option>Problem ⚡</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- JAMPLING — Czewa only -->
+      <div id="jampling-section" style="display:none">
+        <div class="section-title">Jampling / Foxball <small style="font-size:11px;color:#64748b">(tylko Częstochowa)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Jampling — sprawdzenie 5 stanowisk: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Foxball — sprawdzenie:</span></div>
+        </div>
+      </div>
+
+    </div><!-- /card -->
+  </div><!-- /frame -->
+  <div class="bottom-row">
+    <button class="btn-cancel" onclick="show('p-open')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
+    <button class="btn-submit" onclick="show('p-close')">Zatwierdź <div class="btn-dot"></div></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 2 — CHECKLISTA ZAMKNIĘCIA
+═══════════════════════════════════════════════ -->
+<div class="page" id="p-close">
+  <div class="page-title">Wzorzec — Checklista Zamknięcia</div>
+  <div class="frame">
+    <div class="app-header">
+      <div class="app-title">Check lista - zamknięcia</div>
+      <button class="status-btn">Ok?</button>
+    </div>
+    <div class="card">
+      <input type="text" class="date-field" value="29/04/2026" readonly>
+
+      <!-- MOPOWANIE -->
+      <div class="section-title">Mopowanie</div>
+      <div class="check-grid">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wejście do parku:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wieża:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Open:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Siatkówka:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Koszykówka:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wsady do kosza:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Gladiator:</span></div>
+      </div>
+
+      <!-- CZYNNOŚCI OGÓLNE -->
+      <div class="section-title">Czynności ogólne</div>
+      <div class="check-grid-1">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprzątanie śmieci:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprzątanie pokoju socjalnego:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Utrzymanie porządku — pokój techniczny (wiadra/mopy):</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ułożenie materacy na parku:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyłączenie telewizora:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz automatyczny — włączenie na noc:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyrzucenie śmieci / wylanie wody z butelek:</span></div>
+      </div>
+
+      <!-- NINJA -->
+      <div class="section-title">Ninja / Pro</div>
+      <div class="check-grid">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ninja +1/+2/schody:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Track:</span></div>
+      </div>
+
+      <!-- HAPPY CLIMB -->
+      <div class="section-title">Happy Climb <small style="font-size:11px;color:#64748b">(Poz / Łódź / Czewa)</small></div>
+      <div class="check-grid-1">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wciągnięcie lin na Happy Climb:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ułożenie i rozciągnięcie uprzęży:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyłączenie świateł:</span></div>
+      </div>
+
+      <!-- GOKARTY (lokalne) -->
+      <div class="section-title">Gokarty <small style="font-size:11px;color:#64748b">(Poz / Łódź)</small></div>
+      <div class="check-grid-1">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Podłączenie akumulatorów do ładowania:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Zabezpieczenie toru gokartowego (Łódź):</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ułożenie pontonów (Łódź):</span></div>
+      </div>
+
+      <!-- HOLO/ŚCIANA WARSZAWA -->
+      <div class="section-title">HOLO / Ściana <small style="font-size:11px;color:#64748b">(tylko Warszawa)</small></div>
+      <div class="check-grid-1">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">HOLO — wyłączenie systemu:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyłączenie ekranu z zasadami:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Poluzowanie uprzęży na ścianie wspinaczkowej:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Dezynfekcja butów i uprzęży:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Rozwinięcie liny asekuracyjnej na wszystkich urządzeniach:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Eurotramp / Quad — zabezpieczenie:</span></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="bottom-row">
+    <button class="btn-cancel" onclick="show('p-open')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
+    <button class="btn-submit" onclick="show('p-brygad')">Zatwierdź <div class="btn-dot"></div></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 3 — RAPORT BRYGADZISTY
+═══════════════════════════════════════════════ -->
+<div class="page" id="p-brygad">
+  <div class="page-title">Wzorzec — Raport Brygadzisty</div>
+  <div class="frame">
+    <div class="app-header">
+      <div class="app-title">Raport Brygadzisty</div>
+      <button class="status-btn">Ok?</button>
+    </div>
+    <div class="card">
+      <input type="text" class="date-field" value="29/04/2026" readonly>
+      <p style="font-size:12px;color:#64748b;margin-top:8px;line-height:1.5"><strong style="color:#e2e8f0">Instrukcja:</strong> Odpowiadając na pytanie zaznacz odpowiedź w kółko. Jeśli odpowiedziałeś twierdząco opisz sytuację pod pytaniem.</p>
+    </div>
+
+    <div class="card-mid">
+      <!-- Q1 — WYPADEK -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">1.</span>
+          <span class="q-text">Czy doszło do wypadku, który wymaga interwencji medycznej? <span class="alert-tag">⚡ NATYCHMIAST: Filip + Marcin + manager</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q1-detail')"></div>
+        </div>
+        <div id="q1-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Jakiego? (Opisz tutaj co się stało, kto pomógł czy była wzywana karetka)"></textarea>
+          <textarea class="detail-input" style="min-height:42px" placeholder="Kto"></textarea>
+          <textarea class="detail-input" placeholder="Gdzie? (Gdzie wydarzył się wypadek: na trampolinie xyz)"></textarea>
+          <div class="detail-label">Podaj godzinę</div>
+          <div class="time-row">
+            <input type="number" class="time-box" placeholder="HH">
+            <input type="number" class="time-box" placeholder="MM">
+            <input type="number" class="time-box" placeholder="Czas reakcji (s.)">
+          </div>
+          <button class="add-btn">Dodaj kolejny wypadek</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Q2 — KONFRONTACJA -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">2.</span>
+          <span class="q-text">Czy doszło do konfrontacji z wulgarnym lub zdenerwowanym klientem? <span class="alert-tag">⚡ manager lok.</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q2-detail')"></div>
+        </div>
+        <div id="q2-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Opisz co się stało?"></textarea>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Q3 — AWARIA SPRZĘTU -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">3.</span>
+          <span class="q-text">Czy doszło do awarii sprzętu? (trampolina, sprężyna, siatka, kosz itp.) <span class="alert-tag">⚡ tech lok. + Michał</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q3-detail')"></div>
+        </div>
+        <div id="q3-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Co uległo awarii?"></textarea>
+          <textarea class="detail-input" placeholder="Opisz powstałe szkody..."></textarea>
+          <div class="detail-label">Zdjęcie awarii: <span class="alert-tag">⚡ wymagane</span></div>
+          <div style="border:1.5px dashed #2d4a6a;border-radius:8px;padding:14px;text-align:center;color:#4a6080;font-size:13px;margin-top:4px">📷 Dodaj zdjęcie</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Q4 — AWARIA VALO/HOLO -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">4.</span>
+          <span class="q-text">Czy doszło do awarii VALO? <span style="color:#64748b;font-size:11px">(Łódź/Wwa: lub HOLO)</span> <span class="alert-tag">⚡ tech lok. + Michał</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q4-detail')"></div>
+        </div>
+        <div id="q4-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Opisz powstałe szkody lub awarię..."></textarea>
+          <div style="border:1.5px dashed #2d4a6a;border-radius:8px;padding:14px;text-align:center;color:#4a6080;font-size:13px;margin-top:4px">📷 Dodaj zdjęcie</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Q5 — PROBLEM PRACOWNICZY -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">5.</span>
+          <span class="q-text">Czy pojawił się problem przy wykonywaniu obowiązków przez pracowników? <span class="alert-tag">⚡ Marcin + manager lok.</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q5-detail')"></div>
+        </div>
+        <div id="q5-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Opisz zaistniałą sytuację..."></textarea>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- INNE -->
+      <div class="question" style="margin-bottom:0">
+        <div class="q-row">
+          <span class="q-num">+</span>
+          <span class="q-text" style="color:#64748b">Inne uwagi (cokolwiek co nie pasuje wyżej)</span>
+        </div>
+        <textarea class="detail-input" placeholder="Wolne pole — brak alertu..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-row">
+    <button class="btn-cancel" onclick="show('p-close')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
+    <button class="btn-submit" onclick="show('p-open')">Zatwierdź <div class="btn-dot"></div></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 4 — LEGENDA
+═══════════════════════════════════════════════ -->
+<div class="page" id="p-legend">
+  <div class="page-title">Legenda dla IT</div>
+  <div class="frame">
+    <div class="card-mid legend">
+      <strong>Wzorzec UI dla IT — Stacja Grawitacja</strong><br>
+      Dokument pokazuje dokładny wygląd i układ formularzy do wdrożenia w aplikacji.<br><br>
+
+      <strong>Elementy interaktywne:</strong><br>
+      ☐ Checkbox kwadratowy — stan domyślny NIE<br>
+      ☑ Checkbox zaznaczony (zielony) — TAK<br>
+      📷 Upload zdjęcia — max 2 pliki, JPG/PNG<br>
+      🔢 Pole liczbowe — np. ciśnienie, godziny<br>
+      📝 Pole tekstowe — krótkie<br>
+      📄 Textarea — długi opis<br><br>
+
+      <strong class="red">⚡ NATYCHMIAST</strong> — alert wysyłany natychmiast po zapisaniu formularza, nie czeka na koniec dnia. Trafia do konkretnych osób na Slack DM.<br><br>
+
+      <strong class="yellow">⚡ ALERT</strong> — alert dzienny, wysyłany w momencie składania formularza do managera lokalizacji.<br><br>
+
+      <strong>Odbiorcy alertów:</strong><br>
+      • Tech lok. = Włodek / Andrzej / Mateusz / Hubert<br>
+      • Michał = Michał Grudziński (ops)<br>
+      • Roman = manager ścianek (Roman, wspinaczka@sg)<br>
+      • Filip = wiceprezes (wypadki medyczne)<br>
+      • Marcin = dyrektor sportowy (pracownicy)<br>
+      • Manager lok. = manager tej lokalizacji<br><br>
+
+      <strong>Lokalne sekcje:</strong><br>
+      Każda sekcja z dopiskiem <em>(tylko X)</em> pojawia się TYLKO dla wybranego miasta. Wybór miasta na początku lub na koncie użytkownika.<br><br>
+
+      <strong>Kolory tła:</strong><br>
+      Tło strony: #111827<br>
+      Karty/formularze: #162032<br>
+      Pola input: #1e2d42<br>
+      Tekst główny: #e2e8f0<br>
+      Tekst pomocniczy: #64748b<br>
+      Alert czerwony: #ef4444 / #f87171<br>
+      OK zielony: #22c55e<br>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map = {'p-open':0,'p-close':1,'p-brygad':2,'p-legend':3};
+  document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function toggle(el) {
+  el.classList.toggle('checked');
+}
+
+function toggleQ(checkbox, detailId) {
+  checkbox.style.background = checkbox.style.background === 'rgb(45, 106, 79)' ? '#1e2d42' : '#2d6a4f';
+  checkbox.style.borderColor = checkbox.style.background === 'rgb(45, 106, 79)' ? '#4ade80' : '#3d5a7a';
+  const detail = document.getElementById(detailId);
+  if (detail) detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+}
+
+function switchCity(btn, city) {
+  document.querySelectorAll('.city-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cityName').textContent = city;
+
+  // Poduszka
+  document.getElementById('pod-poznan').style.display = city === 'Poznań' ? 'block' : 'none';
+  document.getElementById('pod-lodz').style.display = city === 'Łódź' ? 'block' : 'none';
+  document.getElementById('pod-other').style.display = (city === 'Częstochowa' || city === 'Warszawa') ? 'block' : 'none';
+
+  // Valo Climb (Poz/Łódź/Wwa, nie Czewa)
+  const vc = document.getElementById('valo-climb-section');
+  if (vc) vc.style.display = city !== 'Częstochowa' ? 'block' : 'none';
+
+  // Valo Arena (Łódź/Wwa)
+  const va = document.getElementById('valo-arena-section');
+  if (va) va.style.display = (city === 'Łódź' || city === 'Warszawa') ? 'block' : 'none';
+
+  // HOLO (Wwa)
+  const holo = document.getElementById('holo-section');
+  if (holo) holo.style.display = city === 'Warszawa' ? 'block' : 'none';
+
+  // Ściana prof (Wwa)
+  const sw = document.getElementById('scianka-wwa-section');
+  if (sw) sw.style.display = city === 'Warszawa' ? 'block' : 'none';
+
+  // Gokarty (Poz/Łódź)
+  const gok = document.getElementById('gokarty-section');
+  if (gok) gok.style.display = (city === 'Poznań' || city === 'Łódź') ? 'block' : 'none';
+
+  // Jampling (Czewa)
+  const jam = document.getElementById('jampling-section');
+  if (jam) jam.style.display = city === 'Częstochowa' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
