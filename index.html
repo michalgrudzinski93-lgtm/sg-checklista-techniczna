@@ -126,7 +126,7 @@
       <button class="status-btn">Ok?</button>
     </div>
     <div class="card">
-      <input type="text" class="date-field" value="29/04/2026" readonly>
+      <input type="text" class="date-field" value="" readonly data-today>
 
       <!-- SPRZĄTANIE -->
       <div class="section-title">Sprzątanie ogólne</div>
@@ -298,7 +298,7 @@
       <button class="status-btn">Ok?</button>
     </div>
     <div class="card">
-      <input type="text" class="date-field" value="29/04/2026" readonly>
+      <input type="text" class="date-field" value="" readonly data-today>
 
       <!-- MOPOWANIE -->
       <div class="section-title">Mopowanie</div>
@@ -377,7 +377,7 @@
       <button class="status-btn">Ok?</button>
     </div>
     <div class="card">
-      <input type="text" class="date-field" value="29/04/2026" readonly>
+      <input type="text" class="date-field" value="" readonly data-today>
       <p style="font-size:12px;color:#64748b;margin-top:8px;line-height:1.5"><strong style="color:#e2e8f0">Instrukcja:</strong> Odpowiadając na pytanie zaznacz odpowiedź w kółko. Jeśli odpowiedziałeś twierdząco opisz sytuację pod pytaniem.</p>
     </div>
 
@@ -532,6 +532,16 @@
 </div>
 
 <script>
+// Dynamiczne daty — uzupełnia wszystkie pola z atrybutem data-today bieżącą datą (DD/MM/YYYY)
+(function fillToday() {
+  const d = new Date();
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yyyy = d.getFullYear();
+  const today = `${dd}/${mm}/${yyyy}`;
+  document.querySelectorAll('[data-today]').forEach(el => { el.value = today; });
+})();
+
 function show(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
