@@ -56,6 +56,13 @@
   /* ── ALERT TAG ── */
   .alert-tag{font-size:10px;color:#f87171;background:#450a0a;border:1px solid #991b1b;padding:1px 6px;border-radius:4px;margin-left:6px;font-weight:700;white-space:nowrap}
 
+  /* ── SHIFT TABS (brygadzista zmiana 1/2) ── */
+  .shift-tabs{display:flex;gap:6px;margin-bottom:14px}
+  .shift-tab{flex:1;padding:10px 0;border-radius:10px;border:2px solid #2d4a6a;background:#0d1b2a;color:#64748b;font-size:14px;font-weight:700;text-align:center;cursor:pointer;transition:all .2s}
+  .shift-tab.active{background:#1e3a5f;border-color:#3b82f6;color:#e2e8f0}
+  .shift-tab .shift-badge{display:inline-block;font-size:10px;margin-left:6px;padding:2px 6px;border-radius:10px;background:#1a2d42;color:#64748b}
+  .shift-tab.active .shift-badge{background:#3b82f6;color:#fff}
+  .shift-page{display:none}.shift-page.active{display:block}
   /* ── QUESTION BLOCK (raport brygadzisty) ── */
   .question{margin-bottom:18px}
   .q-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
@@ -642,13 +649,20 @@
   <div class="frame">
     <div class="app-header">
       <div class="app-title">Raport Brygadzisty</div>
-
     </div>
+
+    <!-- SHIFT SELECTOR -->
+    <div class="shift-tabs">
+      <div class="shift-tab active" onclick="switchShift(1)">Zmiana 1 <span class="shift-badge">rano</span></div>
+      <div class="shift-tab" onclick="switchShift(2)">Zmiana 2 <span class="shift-badge">popołudnie</span></div>
+    </div>
+
+    <!-- ZMIANA 1 -->
+    <div class="shift-page active" id="shift-1">
     <div class="card">
       <input type="text" class="date-field" value="" readonly data-today>
       <p style="font-size:12px;color:#64748b;margin-top:8px;line-height:1.5"><strong style="color:#e2e8f0">Instrukcja:</strong> Odpowiadając na pytanie zaznacz odpowiedź w kółko. Jeśli odpowiedziałeś twierdząco opisz sytuację pod pytaniem.</p>
     </div>
-
     <div class="card-mid">
       <!-- Q1 — WYPADEK -->
       <div class="question">
@@ -763,10 +777,128 @@
         <textarea class="detail-input" placeholder="Wolne pole — brak alertu..."></textarea>
       </div>
     </div>
-  </div>
-  <div class="bottom-row">
-    <button class="btn-cancel" onclick="show('p-close')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
-    <button class="btn-submit" onclick="show('p-week')">Zatwierdź <div class="btn-dot"></div></button>
+    </div>
+    <div class="bottom-row">
+      <button class="btn-cancel" onclick="show('p-close')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
+      <button class="btn-submit" onclick="switchShift(2)">Dalej — Zmiana 2 <div class="btn-dot"></div></button>
+    </div>
+    </div><!-- /shift-1 -->
+
+    <!-- ZMIANA 2 -->
+    <div class="shift-page" id="shift-2">
+    <div class="card" style="border-left:3px solid #3b82f6">
+      <input type="text" class="date-field" value="" readonly data-today>
+      <p style="font-size:12px;color:#3b82f6;margin-top:8px;line-height:1.5;font-weight:600">Weryfikacja przez brygadzistę Zmiany 2</p>
+      <p style="font-size:12px;color:#64748b;margin-top:4px;line-height:1.5">Jeśli zauważysz niezgodność z raportem Zmiany 1 — zaznacz pytanie i opisz sytuację. Niezgodność wygeneruje alert do managera lokalizacji.</p>
+    </div>
+    <div class="card-mid">
+      <!-- Q1 — WYPADEK -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">1.</span>
+          <span class="q-text">Czy doszło do wypadku, który wymaga interwencji medycznej? <span class="alert-tag">⚡ NATYCHMIAST: Filip + Marcin + manager</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q1b-detail')"></div>
+        </div>
+        <div id="q1b-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Co się stało, kto pomógł, czy była wzywana karetka"></textarea>
+          <textarea class="detail-input" style="min-height:42px" placeholder="Kto"></textarea>
+          <textarea class="detail-input" placeholder="Gdzie? (np. na trampolinie X)"></textarea>
+          <div class="detail-label">Podaj godzinę</div>
+          <div class="time-row">
+            <input type="number" class="time-box" placeholder="HH">
+            <input type="number" class="time-box" placeholder="MM">
+            <input type="number" class="time-box" placeholder="Czas reakcji (s.)">
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- Q2 -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">2.</span>
+          <span class="q-text">Czy doszło do konfrontacji z wulgarnym lub zdenerwowanym klientem? <span class="alert-tag">⚡ manager lok.</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q2b-detail')"></div>
+        </div>
+        <div id="q2b-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Opisz co się stało?"></textarea>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- Q3 -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">3.</span>
+          <span class="q-text">Czy doszło do awarii sprzętu? (trampolina, sprężyna, siatka, kosz itp.) <span class="alert-tag">⚡ tech lok. + Michał</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q3b-detail')"></div>
+        </div>
+        <div id="q3b-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Co uległo awarii?"></textarea>
+          <textarea class="detail-input" placeholder="Opisz powstałe szkody..."></textarea>
+          <div class="detail-label">Zdjęcie awarii (opcjonalnie):</div>
+          <div style="border:1.5px dashed #2d4a6a;border-radius:8px;padding:14px;text-align:center;color:#4a6080;font-size:13px;margin-top:4px">📷 Dodaj zdjęcie</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- Q4 -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">4.</span>
+          <span class="q-text">Czy doszło do awarii VALO? <span style="color:#64748b;font-size:11px">(Łódź/Wwa: lub HOLO/iWall)</span> <span class="alert-tag">⚡ tech lok. + Michał</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q4b-detail')"></div>
+        </div>
+        <div id="q4b-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Opisz powstałe szkody lub awarię..."></textarea>
+          <div style="border:1.5px dashed #2d4a6a;border-radius:8px;padding:14px;text-align:center;color:#4a6080;font-size:13px;margin-top:4px">📷 Dodaj zdjęcie (opcjonalnie)</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- Q5 -->
+      <div class="question">
+        <div class="q-row">
+          <span class="q-num">5.</span>
+          <span class="q-text">Czy pojawił się problem przy wykonywaniu obowiązków przez pracowników? <span class="alert-tag">⚡ Marcin + manager lok.</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q5b-detail')"></div>
+        </div>
+        <div id="q5b-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Opisz zaistniałą sytuację..."></textarea>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- Q6 CZ -->
+      <div class="question" id="brygad-cz-section-2" style="display:none">
+        <div class="q-row">
+          <span class="q-num">6.</span>
+          <span class="q-text">Czy doszło do awarii Jumplings lub Foxball? <span class="alert-tag">⚡ tech lok. + Michał</span></span>
+          <div class="q-checkbox" onclick="toggleQ(this,'q6b-detail')"></div>
+        </div>
+        <div id="q6b-detail" style="display:none;padding-left:24px">
+          <div class="detail-label">Szczegóły:</div>
+          <textarea class="detail-input" placeholder="Opisz awarię (który sprzęt, co się stało)..."></textarea>
+          <div style="border:1.5px dashed #2d4a6a;border-radius:8px;padding:14px;text-align:center;color:#4a6080;font-size:13px;margin-top:4px">📷 Dodaj zdjęcie (opcjonalnie)</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- INNE -->
+      <div class="question" style="margin-bottom:0">
+        <div class="q-row">
+          <span class="q-num">+</span>
+          <span class="q-text" style="color:#64748b">Inne uwagi (cokolwiek co nie pasuje wyżej)</span>
+        </div>
+        <textarea class="detail-input" placeholder="Wolne pole — brak alertu..."></textarea>
+      </div>
+    </div>
+    </div>
+    <div class="bottom-row">
+      <button class="btn-cancel" onclick="switchShift(1)"><div class="btn-dot"></div> Wróć — Zmiana 1</button>
+      <button class="btn-submit" onclick="show('p-week')">Zatwierdź <div class="btn-dot"></div></button>
+    </div>
+    </div><!-- /shift-2 -->
+
   </div>
 </div>
 
@@ -1572,6 +1704,11 @@ function buildSummary(pageId, summaryId) {
   return missing.length === 0;
 }
 
+function switchShift(n) {
+  document.querySelectorAll('.shift-tab').forEach((t,i) => t.classList.toggle('active', i===n-1));
+  document.querySelectorAll('.shift-page').forEach((p,i) => p.classList.toggle('active', i===n-1));
+}
+
 function toggleExpand(arrId, subId) {
   const sub = document.getElementById(subId);
   if (!sub) return;
@@ -1704,6 +1841,7 @@ function switchCity(btn, city) {
   document.getElementById('holo-close-section').style.display = city === 'Warszawa' ? 'block' : 'none';
   document.getElementById('cz-happy-materace').style.display = city === 'Częstochowa' ? 'flex' : 'none';
   document.getElementById('brygad-cz-section').style.display = city === 'Częstochowa' ? 'block' : 'none';
+  document.getElementById('brygad-cz-section-2').style.display = city === 'Częstochowa' ? 'block' : 'none';
   // ZAMKNIĘCIE — śmieci wyrzucane rano tylko w PZ
   document.getElementById('zamk-smieci').style.display = city === 'Poznań' ? 'none' : 'flex';
 
