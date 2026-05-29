@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SG — Wzorzec Checklisty dla IT (v1.2)</title>
+<title>SG — Wzorzec Checklisty dla IT (v1.3-PZ)</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e2e8f0;min-height:100vh}
@@ -98,6 +98,31 @@
 
   /* ── INFO NOTE ── */
   .info-note{background:#1e293b40;border-left:3px solid #60a5fa;padding:8px 12px;font-size:11px;color:#94a3b8;border-radius:0 6px 6px 0;margin:8px 0;line-height:1.5}
+
+  /* ── PODSUMOWANIE CHECKLISTY ── */
+  .summary-box{background:#0d1b2a;border-radius:12px;padding:14px 16px;margin:14px 0}
+  .summary-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .summary-title{font-size:13px;font-weight:700;color:#e2e8f0}
+  .summary-score{font-size:13px;font-weight:700}
+  .summary-score.all-ok{color:#4ade80}
+  .summary-score.has-missing{color:#f97316}
+  .summary-missing-label{font-size:11px;color:#94a3b8;margin-bottom:6px}
+  .summary-missing-list{display:flex;flex-direction:column;gap:4px}
+  .summary-missing-item{font-size:12px;color:#fbbf24;background:#1c1a0a;border-left:3px solid #f97316;padding:5px 10px;border-radius:0 6px 6px 0}
+  .summary-all-ok-msg{font-size:13px;color:#4ade80;text-align:center;padding:6px 0}
+
+  /* ── PZ ZONE NOTE (foto + opis per strefa w otwarciu) ── */
+  .pz-zone-note{margin-top:8px}
+  .pz-zone-note textarea{width:100%;background:#1e2d42;border:1px solid #2d4a6a;border-radius:8px;padding:8px 12px;color:#94a3b8;font-size:13px;min-height:46px;resize:none}
+  .photo-upload-btn{border:1.5px dashed #2d4a6a;border-radius:8px;padding:9px;text-align:center;color:#4a6080;font-size:12px;margin-top:6px;cursor:pointer}
+  /* ── EXPANDABLE SUB-SECTION ── */
+  .expand-label{cursor:pointer;display:flex;align-items:center;gap:6px;flex:1}
+  .expand-arr{font-size:10px;color:#60a5fa;display:inline-block;transition:transform .2s;margin-left:4px}
+  .sub-checklist{display:none;margin:4px 0 8px 32px;border-left:2px solid #2d4a6a;padding-left:10px}
+  .sub-checklist.open{display:block}
+  .sub-option-row{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:13px;color:#cbd5e1}
+  .sub-option-row .check-box{width:18px;height:18px;flex-shrink:0}
+  .sub-note{font-size:11px;color:#64748b;margin:6px 0 2px;padding-left:2px}
 </style>
 </head>
 <body>
@@ -174,9 +199,14 @@
         <div class="check-item" id="ninja-dywany"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Dywany / podłoga:</span></div>
         <div class="check-item" id="ninja-podstawowe"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ninja +1 / +2:</span></div>
         <!-- WWA: tylko 1 poziom ninja -->
-        <div class="check-item" id="ninja-wwa-open" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ninja +1:</span></div>
+        <div class="check-item" id="ninja-wwa-open" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ninja:</span></div>
         <div class="check-item" id="ninja-schody" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Schody:</span></div>
         <div class="check-item" id="ninja-siatki-open"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie siatek wokół basenu z gąbkami: <span class="alert-tag">⚡ ALERT</span></span></div>
+      </div>
+      <!-- PZ: opis i zdjęcie dla sekcji Sprzątanie ogólne -->
+      <div class="pz-zone-note" id="pz-note-sprz" style="display:none">
+        <textarea placeholder="Opis / uwagi — Sprzątanie ogólne..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
 
       <!-- ────────────────────────────
@@ -191,6 +221,11 @@
         <div class="info-note" id="tor-pz-note" style="display:none">
           W PZ tor przeszkód sprzątany całościowo 3× w tygodniu w ciągu dnia — szczegółowe checki w zakładce <strong>Tygodniowa</strong>.
         </div>
+        <!-- PZ: opis i zdjęcie dla sekcji Tor przeszkód -->
+        <div class="pz-zone-note" id="pz-note-tor-open" style="display:none">
+          <textarea placeholder="Opis / uwagi — Tor przeszkód..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
       </div>
 
       <!-- ────────────────────────────
@@ -204,6 +239,10 @@
         <div class="input-label">📷 Zdjęcie w razie uszkodzenia (opcjonalnie):</div>
         <div style="border:1.5px dashed #2d4a6a;border-radius:8px;padding:14px;text-align:center;color:#4a6080;font-size:13px;margin-top:4px">📷 Dodaj zdjęcie</div>
         <div class="info-note">Strefa Parkour to monolityczna konstrukcja przykotwiczona do podłogi — sprawdzamy jako całość, nie po elementach.</div>
+        <div class="pz-zone-note" id="pz-note-parkour-open" style="display:none">
+          <textarea placeholder="Opis / uwagi — Parkour..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
       </div>
 
       <div id="happy-climb-open-section"><!-- ────────────────────────────
@@ -221,6 +260,10 @@
         <div class="check-item" id="cz-uprzeze-open" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie uprzęży (czy rozciągnięte): <span class="alert-tag">⚡ ALERT</span></span></div>
       </div>
       <div class="info-note" id="happy-wwa-note" style="display:none">W Warszawie światła Happy Climb włączają się automatycznie — check pomijamy.</div>
+      <div class="pz-zone-note" id="pz-note-hc-open" style="display:none">
+        <textarea placeholder="Opis / uwagi — Happy Climb..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+      </div>
       </div><!-- /happy-climb-open-section -->
 
       <div id="poduszka-open-section"><!-- ────────────────────────────
@@ -262,6 +305,10 @@
           <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Skok testowy: <span class="alert-tag">⚡ ALERT</span></span></div>
         </div>
       </div>
+      <div class="pz-zone-note" id="pz-note-pod-open" style="display:none">
+        <textarea placeholder="Opis / uwagi — Poduszka / Airbag..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+      </div>
       </div><!-- /poduszka-open-section -->
 
       <div id="gladiator-open-section"><!-- ────────────────────────────
@@ -272,6 +319,10 @@
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie wałków Gladiatora:</span></div>
         <!-- CZ: basen z gąbkami przy Gladiatorze -->
         <div class="check-item" id="cz-glad-gabki" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Poziom i rozłożenie gąbek w basenie Gladiatora: <span class="alert-tag">⚡ ALERT</span></span></div>
+      </div>
+      <div class="pz-zone-note" id="pz-note-glad-open" style="display:none">
+        <textarea placeholder="Opis / uwagi — Gladiator..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
       </div><!-- /gladiator-open-section -->
 
@@ -289,6 +340,10 @@
         <!-- ŁD only: piłki + odkurzacz pod trampolinami -->
         <div class="check-item" id="open-ld-pilki" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie piłek:</span></div>
         <div class="check-item" id="open-ld-odkurz" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz automatyczny pod trampolinami:</span></div>
+      </div>
+      <div class="pz-zone-note" id="pz-note-open-open" style="display:none">
+        <textarea placeholder="Opis / uwagi — Open / Trampoliny..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
       </div><!-- /open-tramp-open-section -->
 
@@ -439,9 +494,21 @@
 
     </div><!-- /card -->
   </div><!-- /frame -->
+  <!-- PODSUMOWANIE OTWARCIA -->
+  <div class="frame" style="padding-top:0;padding-bottom:0">
+    <div class="summary-box" id="summary-open" style="display:none">
+      <div class="summary-header">
+        <span class="summary-title">📋 Podsumowanie otwarcia</span>
+        <span class="summary-score" id="sum-open-score"></span>
+      </div>
+      <div class="summary-all-ok-msg" style="display:none">✅ Wszystkie pozycje sprawdzone — można zatwierdzić!</div>
+      <div class="summary-missing-label" style="font-size:11px;color:#94a3b8;margin-bottom:6px">Niesprawdzone pozycje:</div>
+      <div class="summary-missing-list" style="display:none"></div>
+    </div>
+  </div>
   <div class="bottom-row">
     <button class="btn-cancel" onclick="show('p-open')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
-    <button class="btn-submit" onclick="show('p-close')">Zatwierdź <div class="btn-dot"></div></button>
+    <button class="btn-submit" onclick="buildSummary('p-open','summary-open')">Zatwierdź <div class="btn-dot"></div></button>
   </div>
 </div>
 
@@ -549,9 +616,21 @@
 
     </div>
   </div>
+  <!-- PODSUMOWANIE ZAMKNIĘCIA -->
+  <div class="frame" style="padding-top:0;padding-bottom:0">
+    <div class="summary-box" id="summary-close" style="display:none">
+      <div class="summary-header">
+        <span class="summary-title">📋 Podsumowanie zamknięcia</span>
+        <span class="summary-score" id="sum-close-score"></span>
+      </div>
+      <div class="summary-all-ok-msg" style="display:none">✅ Wszystkie pozycje sprawdzone — można zatwierdzić!</div>
+      <div class="summary-missing-label" style="font-size:11px;color:#94a3b8;margin-bottom:6px">Niesprawdzone pozycje:</div>
+      <div class="summary-missing-list" style="display:none"></div>
+    </div>
+  </div>
   <div class="bottom-row">
     <button class="btn-cancel" onclick="show('p-open')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
-    <button class="btn-submit" onclick="show('p-brygad')">Zatwierdź <div class="btn-dot"></div></button>
+    <button class="btn-submit" onclick="buildSummary('p-close','summary-close')">Zatwierdź <div class="btn-dot"></div></button>
   </div>
 </div>
 
@@ -720,11 +799,90 @@
       <!-- ───── HAPPY CLIMB tygodniowo (uprzęże + lonże + karabińczyki + automaty) ───── -->
       <div class="section-title">Happy Climb — przegląd techniczny</div>
       <div class="check-grid-1">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Uprzęże — przegląd techniczny (wszystkie rozmiary): <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabińczyki linowe / zatrzaskowe — stan: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Lonże — wszystkie długości: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
+
+        <!-- UPRZĘŻE — base item + PZ expandable -->
+        <div class="check-item">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-hc-uprzeze','sub-hc-uprzeze')">
+            Uprzęże — przegląd techniczny (wszystkie rozmiary): <span class="alert-tag">⚡ NATYCHMIAST + Roman</span>
+            <span class="expand-arr" id="arr-hc-uprzeze" style="display:none">▶</span>
+          </span>
+        </div>
+        <!-- PZ: sub-checklist rozmiarów uprzęży -->
+        <div class="sub-checklist" id="sub-hc-uprzeze" style="display:none">
+          <p class="sub-note">W którym rozmiarze problem?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>XXXS</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>XXS-XS</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>S-M</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>L-XL</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
+        <!-- KARABIŃCZYKI — base item + PZ expandable -->
+        <div class="check-item">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-hc-kara','sub-hc-kara')">
+            Karabińczyki linowe / zatrzaskowe — stan: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span>
+            <span class="expand-arr" id="arr-hc-kara" style="display:none">▶</span>
+          </span>
+        </div>
+        <!-- PZ: sub-checklist ścianek -->
+        <div class="sub-checklist" id="sub-hc-kara" style="display:none">
+          <p class="sub-note">Na której ściance problem?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Radio</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Ser</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Pomarańczowa</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Miasto</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Drzewo</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Kosmos</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Dinozaur</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Wóz strażacki</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Piłkarzyki</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Wodospad</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Statek</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Księżniczka</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
+        <!-- LONŻE — tylko dla nie-PZ -->
+        <div class="check-item" id="week-hc-lonze"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Lonże — wszystkie długości: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
+
         <div class="check-item" id="week-pajaki" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pająki (wspólne z parkiem linowym): <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Automaty asekuracyjne — działanie: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
+
+        <!-- AUTOMATY ASEKURACYJNE — base item + PZ expandable -->
+        <div class="check-item">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-hc-auto','sub-hc-auto')">
+            Automaty asekuracyjne — działanie: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span>
+            <span class="expand-arr" id="arr-hc-auto" style="display:none">▶</span>
+          </span>
+        </div>
+        <!-- PZ: sub-checklist ścianek dla automatów -->
+        <div class="sub-checklist" id="sub-hc-auto" style="display:none">
+          <p class="sub-note">Na której ściance problem?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Radio</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Ser</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Pomarańczowa</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Miasto</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Drzewo</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Kosmos</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Dinozaur</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Wóz strażacki</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Piłkarzyki</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Wodospad</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Statek</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Księżniczka</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
+      </div>
+      <!-- PZ: opis i zdjęcie per dział (tygodniowa) -->
+      <div class="pz-zone-note" id="pz-note-week-hc" style="display:none">
+        <textarea placeholder="Opis / uwagi — Happy Climb tygodniowa..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
       <div class="info-note" id="week-ld-uprzeze" style="display:none">
         ŁD: 2 rozmiary uprzęży do parku linowego + pająki wspólne z Happy Climb. 3 długości lonż.
@@ -733,10 +891,78 @@
       <!-- ───── PODUSZKI tygodniowo ───── -->
       <div class="section-title">Poduszki / Airbag — przegląd techniczny</div>
       <div class="check-grid-1">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Guma poduszek: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Spódniczki: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rzepy: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Płachta: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <!-- Guma poduszek — ukryta dla PZ -->
+        <div class="check-item" id="week-pod-guma"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Guma poduszek: <span class="alert-tag">⚡ ALERT</span></span></div>
+
+        <!-- Spódniczki — z PZ expandable -->
+        <div class="check-item">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-pod-spod','sub-pod-spod')">
+            Spódniczki: <span class="alert-tag">⚡ ALERT</span>
+            <span class="expand-arr" id="arr-pod-spod" style="display:none">▶</span>
+          </span>
+        </div>
+        <div class="sub-checklist" id="sub-pod-spod" style="display:none">
+          <p class="sub-note">Która poduszka?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Poduszka Mała</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Poduszka Duża</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
+        <!-- Rzepy — z PZ expandable -->
+        <div class="check-item">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-pod-rzepy','sub-pod-rzepy')">
+            Rzepy: <span class="alert-tag">⚡ ALERT</span>
+            <span class="expand-arr" id="arr-pod-rzepy" style="display:none">▶</span>
+          </span>
+        </div>
+        <div class="sub-checklist" id="sub-pod-rzepy" style="display:none">
+          <p class="sub-note">Która poduszka?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Poduszka Mała</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Poduszka Duża</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
+        <!-- Płachta — z PZ expandable -->
+        <div class="check-item">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-pod-plachta','sub-pod-plachta')">
+            Płachta: <span class="alert-tag">⚡ ALERT</span>
+            <span class="expand-arr" id="arr-pod-plachta" style="display:none">▶</span>
+          </span>
+        </div>
+        <div class="sub-checklist" id="sub-pod-plachta" style="display:none">
+          <p class="sub-note">Która poduszka?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Poduszka Mała</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Poduszka Duża</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
+        <!-- Pady wokół poduszki — tylko PZ -->
+        <div class="check-item" id="week-pod-pady" style="display:none">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-pod-pady','sub-pod-pady')">
+            Pady wokół poduszki: <span class="alert-tag">⚡ ALERT</span>
+            <span class="expand-arr" id="arr-pod-pady">▶</span>
+          </span>
+        </div>
+        <div class="sub-checklist" id="sub-pod-pady" style="display:none">
+          <p class="sub-note">Która poduszka?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Poduszka Mała</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Poduszka Duża</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
+      </div>
+      <!-- PZ: opis i zdjęcie per dział -->
+      <div class="pz-zone-note" id="pz-note-week-pod" style="display:none">
+        <textarea placeholder="Opis / uwagi — Poduszki tygodniowa..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
       <div class="info-note" id="week-wwa-poduszka" style="display:none">
         Warszawa: przegląd poduszki BEZ rozbierania w każdy <strong>wtorek</strong>. Pełne otwarcie poduszki — raz na 1-2 miesiące (w checkliście miesięcznej).
@@ -745,9 +971,36 @@
       <!-- ───── AIRTRACK / STREFA PRO tygodniowo ───── -->
       <div class="section-title">AirTrack / Strefa PRO — stan techniczny</div>
       <div class="check-grid-1">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Przetarcia airtracków: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Dziury w airtrackach: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Schodzące powietrze (test szczelności): <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label">Przetarcia airtracków: <span class="alert-tag">⚡ ALERT</span></span>
+        </div>
+        <!-- PZ: opis i zdjęcie po każdym checku -->
+        <div class="pz-zone-note" id="pz-note-air-przetarcia" style="display:none">
+          <textarea placeholder="Opis / lokalizacja przetarcia..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label">Dziury w airtrackach: <span class="alert-tag">⚡ ALERT</span></span>
+        </div>
+        <div class="pz-zone-note" id="pz-note-air-dziury" style="display:none">
+          <textarea placeholder="Opis / lokalizacja dziury..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+        <!-- Schodzące powietrze — ukryte dla PZ -->
+        <div class="check-item" id="week-air-schodzace"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Schodzące powietrze (test szczelności): <span class="alert-tag">⚡ ALERT</span></span></div>
+        <!-- Sprawdzenie szczelności w zaworach — tylko PZ -->
+        <div class="check-item" id="week-air-zawory" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label">Sprawdzenie szczelności w zaworach: <span class="alert-tag">⚡ ALERT</span></span>
+        </div>
+        <div class="pz-zone-note" id="pz-note-air-zawory" style="display:none">
+          <textarea placeholder="Opis / który zawór..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+      </div>
+      <!-- PZ: opis i zdjęcie per dział -->
+      <div class="pz-zone-note" id="pz-note-week-air" style="display:none">
+        <textarea placeholder="Opis / uwagi — AirTrack tygodniowa..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
 
       <!-- ───── TOR PRZESZKÓD / NINJA tygodniowo (nie WWA) ───── -->
@@ -755,18 +1008,23 @@
       <!-- Tytuł: Tor przeszkód dla PZ/ŁD, Ninja dla CZ -->
       <div class="section-title" id="week-tor-title-default">Tor przeszkód — przegląd elementów</div>
       <div class="section-title" id="week-tor-title-cz" style="display:none">Ninja — przegląd elementów</div>
-      <!-- Domyślna lista (PZ) -->
+      <!-- Domyślna lista (PZ) — wszystko z alertem -->
       <div class="check-grid" id="week-tor-default">
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wałek 1:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wałek 2:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wałki pionowe:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wałki poziome:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wałek 3:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Okienka:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Trampoliny toru:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Pady:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Materace:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Siatki:</span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 1: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 2: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki pionowe: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki poziome: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 3: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Okienka: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trampoliny toru: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pady: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Materace: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatki: <span class="alert-tag">⚡ ALERT</span></span></div>
+      </div>
+      <!-- PZ: opis i zdjęcie dla Tor przeszkód tygodniowa -->
+      <div class="pz-zone-note" id="pz-note-week-tor" style="display:none">
+        <textarea placeholder="Opis / uwagi — Tor przeszkód tygodniowa..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
       <!-- Lista ŁD — od lewej: skośne stepy → wałek -->
       <div class="check-grid" id="week-tor-ld" style="display:none">
@@ -809,7 +1067,28 @@
         <div class="check-item" id="week-ninja-pasy"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pasy na których wiszą przeszkody: <span class="alert-tag">⚡ ALERT</span></span></div>
         <!-- ŁD: przeszkody na karabinkach/obejmach (nie na pasach) -->
         <div class="check-item" id="week-ninja-karabinki" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki / obejmy na których wiszą przeszkody: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Stan przeszkód torowych:</span></div>
+        <div class="check-item">
+          <div class="check-box" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-ninja-stan','sub-ninja-stan')">
+            Stan przeszkód torowych: <span class="expand-arr" id="arr-ninja-stan">▶</span>
+          </span>
+        </div>
+        <div class="sub-checklist" id="sub-ninja-stan" style="display:none">
+          <p class="sub-note">Zaznacz elementy do sprawdzenia:</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Piłki w siatkach</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Zawiesia</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Liny jutowe</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Drabinki — mostki</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Drabinki wiszące jutowe</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Gladiator z workami</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Drabinki stalowe</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Kółka</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Tyrolka</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Drążki</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Kolorowe lampy:</span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / konstrukcja: <span class="alert-tag">⚡ ALERT</span></span></div>
@@ -828,15 +1107,56 @@
           <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Ściany: <span class="alert-tag">⚡ ALERT</span></span></div>
           <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Drabinki: <span class="alert-tag">⚡ ALERT</span></span></div>
           <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Listwy: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ ALERT</span></span></div>
         </div>
+        <textarea class="input-field" style="margin-top:8px;min-height:46px" placeholder="Opis / uwagi — Parkour..."></textarea>
+        <div class="photo-upload-btn" style="margin-top:6px">📷 Dodaj zdjęcie</div>
       </div>
 
       <!-- ───── PARK LINOWY ───── -->
-      <div class="section-title">Park linowy — uprzęże i automaty (tygodniowo)</div>
+      <div class="section-title">Park linowy — uprzęże i lonże (tygodniowo)</div>
       <div class="check-grid-1">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Uprzęże parku linowego (wszystkie rozmiary): <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Lonże parku linowego: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
+
+        <!-- UPRZĘŻE — z PZ expandable -->
+        <div class="check-item">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-park-uprzeze','sub-park-uprzeze')">
+            Uprzęże parku linowego (wszystkie rozmiary): <span class="alert-tag">⚡ NATYCHMIAST + Roman</span>
+            <span class="expand-arr" id="arr-park-uprzeze" style="display:none">▶</span>
+          </span>
+        </div>
+        <div class="sub-checklist" id="sub-park-uprzeze" style="display:none">
+          <p class="sub-note">W którym rozmiarze problem?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>XS</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>S-L</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>XL-XXL</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
+        <!-- LONŻE — z PZ expandable -->
+        <div class="check-item">
+          <div class="check-box alert" onclick="toggle(this)"></div>
+          <span class="check-label expand-label" onclick="toggleExpand('arr-park-lonze','sub-park-lonze')">
+            Lonże parku linowego: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span>
+            <span class="expand-arr" id="arr-park-lonze" style="display:none">▶</span>
+          </span>
+        </div>
+        <div class="sub-checklist" id="sub-park-lonze" style="display:none">
+          <p class="sub-note">Który element lonży?</p>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Linka</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>Karabinek</span></div>
+          <div class="sub-option-row"><div class="check-box" onclick="toggle(this)"></div><span>C (złączka)</span></div>
+          <textarea class="input-field" style="margin-top:6px;min-height:40px" placeholder="Opis problemu..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+
         <div class="check-item" id="week-park-automaty"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Automat do ewakuacji z parku linowego: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
+      </div>
+      <!-- PZ: opis i zdjęcie per dział -->
+      <div class="pz-zone-note" id="pz-note-week-park" style="display:none">
+        <textarea placeholder="Opis / uwagi — Park linowy tygodniowa..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
       <div class="info-note" id="week-park-ld-note" style="display:none">
         ŁD: Park linowy nie posiada automatów asekuracyjnych — pozycja pomijana.
@@ -855,23 +1175,74 @@
       </div>
 
       <!-- ───── TRAMPOLINY SPORTOWE I SPRĘŻYNY ───── -->
-      <div class="section-title">Trampoliny sportowe — przegląd techniczny</div>
+      <div class="section-title">Trampoliny sportowe (AIR MAXX) — przegląd techniczny</div>
       <div class="check-grid-1">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan mat trampoliny (przetarcia, rozdarcia): <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan trampoliny (przetarcia, rozdarcia): <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny — stan, naprężenie, brakujące: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Spódniczki — stan i mocowanie: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Fiszbiny — stan i kompletność: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <!-- Spódniczki — ukryte dla PZ (AIR MAXX ich nie ma) -->
+        <div class="check-item" id="week-tramp-spodniczki"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Spódniczki — stan i mocowanie: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <!-- Fiszbiny — ukryte dla PZ (AIR MAXX ich nie ma) -->
+        <div class="check-item" id="week-tramp-fiszbiny"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Fiszbiny — stan i kompletność: <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Gumy — stan i naprężenie: <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / rama — widoczne uszkodzenia: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Poduszki ochronne wokół trampoliny:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Pady wokół trampoliny:</span></div>
+      </div>
+      <!-- PZ: opis i zdjęcie per dział -->
+      <div class="pz-zone-note" id="pz-note-week-tramp-sport" style="display:none">
+        <textarea placeholder="Opis / uwagi — Trampoliny sportowe..."></textarea>
+        <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+      </div>
+
+      <!-- Trampoliny zwykłe — tylko PZ -->
+      <div id="week-tramp-zwykle-section" style="display:none">
+        <div class="section-title">Trampoliny zwykłe — przegląd techniczny <small style="font-size:11px;color:#64748b">(tylko Poznań)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trampolina (przetarcia, rozdarcia): <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny — stan, naprężenie, brakujące: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Fiszbiny — stan i kompletność: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Gumy — stan i naprężenie: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Pady wokół trampoliny:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Spódniczki — stan i mocowanie:</span></div>
+        </div>
+        <div class="pz-zone-note" id="pz-note-week-tramp-zwykle">
+          <textarea placeholder="Opis / uwagi — Trampoliny zwykłe..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
       </div>
 
       <!-- ───── ODKURZACZ AUTOMATYCZNY ───── -->
-      <div class="section-title">Odkurzacz automatyczny — czyszczenie</div>
-      <div class="check-grid-1">
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przetarcie czujników:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przedmuchanie kompresorem:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyczyszczenie kółek:</span></div>
+      <!-- Wersja PZ: podział na typy; wersja inne miasta: ogólna -->
+      <div id="week-odkurz-pz" style="display:none;flex-direction:column;gap:0">
+        <div class="section-title">Odkurzacz myjąco-odkurzający — czyszczenie <small style="font-size:11px;color:#64748b">(Poznań)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przetarcie czujników:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przedmuchanie kompresorem:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyczyszczenie kółek:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Mycie myjącego odkurzacza:</span></div>
+        </div>
+        <div class="pz-zone-note" id="pz-note-week-odkurz-myj">
+          <textarea placeholder="Opis / uwagi — odkurzacz myjąco-odkurzający..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+        <div class="section-title">Odkurzacz odkurzający — czyszczenie <small style="font-size:11px;color:#64748b">(Poznań)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przetarcie czujników:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przedmuchanie kompresorem:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyczyszczenie kółek:</span></div>
+        </div>
+        <div class="pz-zone-note" id="pz-note-week-odkurz-suchy">
+          <textarea placeholder="Opis / uwagi — odkurzacz odkurzający..."></textarea>
+          <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
+        </div>
+      </div>
+      <!-- Wersja ogólna (nie PZ) -->
+      <div id="week-odkurz-other">
+        <div class="section-title">Odkurzacz automatyczny — czyszczenie</div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przetarcie czujników:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przedmuchanie kompresorem:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyczyszczenie kółek:</span></div>
+        </div>
       </div>
 
       <!-- ───── HOLO tygodniowo — tylko WWA ───── -->
@@ -887,6 +1258,8 @@
       <div class="section-title">Urządzenia interaktywne — przegląd techniczny</div>
       <div class="check-grid-1">
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Jump — stan techniczny, kalibracja: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <!-- Valo Climb — PZ + ŁD + WWA -->
+        <div class="check-item" id="week-valo-climb-inter" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Climb — stan techniczny, czyszczenie rzutnika: <span class="alert-tag">⚡ ALERT</span></span></div>
         <!-- CZ: Jumplings + Foxball -->
         <div id="week-cz-interactive" style="display:none">
           <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Foxball — piłki (czy nie schodzi powietrze): <span class="alert-tag">⚡ ALERT</span></span></div>
@@ -905,42 +1278,85 @@
           <span style="font-size:11px;color:#64748b;font-weight:600;text-align:center">Ilość</span>
           <span style="font-size:11px;color:#64748b;font-weight:600;text-align:center">Stan</span>
         </div>
+        <!-- Definicja makra wiersza przez powtarzalny blok -->
         <!-- Piłki do siatkówki -->
         <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
           <span class="check-label">Piłki siatkówka:</span>
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
         </div>
-        <!-- Piłki do koszykówki -->
         <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
           <span class="check-label">Piłki koszykówka:</span>
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
         </div>
-        <!-- Piłki inne (np. Foxball, speedball) -->
         <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
           <span class="check-label">Piłki inne:</span>
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
         </div>
-        <!-- Kije / rakietki -->
         <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
           <span class="check-label">Kije / rakietki:</span>
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
         </div>
-        <!-- Kamizelki / uprząż sportowa -->
         <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
           <span class="check-label">Kamizelki / akcesoria:</span>
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
         </div>
+
+        <!-- PZ EXTRA: rozszerzony sprzęt sportowy -->
+        <div id="week-inw-pz" style="display:none;display:flex;flex-direction:column;gap:8px">
+          <!-- helper: wszystkie PZ-only items -->
+        </div>
+      </div>
+      <!-- PZ: pełna lista inwentaryzacji -->
+      <div id="week-inw-pz-full" style="display:none;flex-direction:column;gap:8px;margin-top:8px">
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;padding:0 2px">
+          <span style="font-size:11px;color:#f97316;font-weight:600">Dodatkowe (Poznań)</span>
+          <span style="font-size:11px;color:#64748b;font-weight:600;text-align:center">Ilość</span>
+          <span style="font-size:11px;color:#64748b;font-weight:600;text-align:center">Stan</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Pachołki pomarańczowe:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Stożki szare:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Stożki niebieskie:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Stożki żółte:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Stożki czerwone:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Guma pomarańczowa:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Hulahop:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Tunel:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Szarfy niebieskie:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Szarfy czerwone:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Szarfy żółte:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Woreczki zielone:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Woreczki niebieskie:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Woreczki czerwone:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Drabinki:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Taśmy rehabilitacyjne:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Piłki do masażu z wypustkami:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Skakanki:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Kółko do rolowania:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Dysk do balansowania:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Drewniane kółka:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Poduszki air gym:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Materac air gym:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Wałek air gym:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Ścieżka gimnastyczna air gym:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Tyczki krótkie żółte:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Tyczki krótkie czerwone:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Tyczki długie niebieskie:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Tyczki długie żółte:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Tyczki długie czerwone:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Kostki do jogi:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center"><span class="check-label">Gumy oporowe:</span><input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt."><select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select></div>
+      </div>
+
         <!-- Uwagi -->
         <div>
           <span class="input-label">Uwagi / braki:</span>
           <textarea class="detail-input" placeholder="np. brakuje 2 piłek, kij złamany..." style="min-height:50px"></textarea>
         </div>
-      </div>
 
       <!-- ───── STAN NAKLEJEK ───── -->
       <div class="section-title">Stan naklejek (informacyjnych / regulaminowych)</div>
@@ -950,9 +1366,21 @@
 
     </div>
   </div>
+  <!-- PODSUMOWANIE TYGODNIOWEJ -->
+  <div class="frame" style="padding-top:0;padding-bottom:0">
+    <div class="summary-box" id="summary-week" style="display:none">
+      <div class="summary-header">
+        <span class="summary-title">📋 Podsumowanie tygodniowej</span>
+        <span class="summary-score" id="sum-week-score"></span>
+      </div>
+      <div class="summary-all-ok-msg" style="display:none">✅ Wszystkie pozycje sprawdzone — można zatwierdzić!</div>
+      <div class="summary-missing-label" style="font-size:11px;color:#94a3b8;margin-bottom:6px">Niesprawdzone pozycje:</div>
+      <div class="summary-missing-list" style="display:none"></div>
+    </div>
+  </div>
   <div class="bottom-row">
     <button class="btn-cancel" onclick="show('p-brygad')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
-    <button class="btn-submit" onclick="show('p-legend')">Zatwierdź <div class="btn-dot"></div></button>
+    <button class="btn-submit" onclick="buildSummary('p-week','summary-week')">Zatwierdź <div class="btn-dot"></div></button>
   </div>
 </div>
 
@@ -963,9 +1391,9 @@
   <div class="page-title">Legenda dla IT (v1.2)</div>
   <div class="frame">
     <div class="card-mid legend">
-      <strong>Wzorzec UI dla IT — Stacja Grawitacja (v1.2)</strong><br>
+      <strong>Wzorzec UI dla IT — Stacja Grawitacja (v1.3-PZ)</strong><br>
       Dokument pokazuje dokładny wygląd i układ formularzy do wdrożenia w aplikacji.<br>
-      <strong>Zaktualizowano 2026-05-27</strong> po feedbacku z 4 miast (Agata/PZ, Kamil/ŁD, Hubert/WWA, Mateusz/CZ) — 27 decyzji wdrożonych.<br><br>
+      <strong>Zaktualizowano 2026-05-29</strong> — iteracja Poznań: expandable sub-checki (karabińczyki/automaty HC ze ściankami, uprzęże HC i PL z rozmiarami, lonże PL z komponentami, poduszki per typ, stan przeszkód ninja), sekcja trampolyn zwykłych PZ, podział odkurzacza na typy, rozszerzona inwentaryzacja PZ (32 pozycje), opis+zdjęcie per strefa.<br><br>
 
       <strong>Elementy interaktywne:</strong><br>
       ☐ Checkbox kwadratowy — stan domyślny NIE<br>
@@ -1055,6 +1483,103 @@ function toggle(el) {
   el.classList.toggle('checked');
 }
 
+// Buduje podsumowanie przed zatwierdzeniem checklisty
+// pageId: id diva strony, summaryId: id kontenera podsumowania
+function buildSummary(pageId, summaryId) {
+  const page = document.getElementById(pageId);
+  const summaryEl = document.getElementById(summaryId);
+  if (!page || !summaryEl) return true;
+
+  // Zbieramy wszystkie widoczne checkboxy (nie sub-checklist, nie q-checkbox)
+  const allBoxes = Array.from(page.querySelectorAll('.check-box:not(.sub-checklist .check-box)'))
+    .filter(box => {
+      // Sprawdź czy box jest widoczny (jego rodzice też)
+      let el = box;
+      while (el && el !== page) {
+        if (el.style.display === 'none') return false;
+        el = el.parentElement;
+      }
+      return true;
+    });
+
+  const total = allBoxes.length;
+  const checked = allBoxes.filter(b => b.classList.contains('checked')).length;
+  const missing = allBoxes.filter(b => !b.classList.contains('checked'));
+
+  // Buduj HTML
+  const scoreEl = summaryEl.querySelector('.summary-score');
+  const listEl = summaryEl.querySelector('.summary-missing-list');
+  const labelEl = summaryEl.querySelector('.summary-missing-label');
+  const okMsg = summaryEl.querySelector('.summary-all-ok-msg');
+
+  scoreEl.textContent = checked + ' / ' + total + ' sprawdzono';
+
+  if (missing.length === 0) {
+    scoreEl.className = 'summary-score all-ok';
+    labelEl.style.display = 'none';
+    listEl.style.display = 'none';
+    okMsg.style.display = 'block';
+  } else {
+    scoreEl.className = 'summary-score has-missing';
+    labelEl.style.display = 'block';
+    listEl.style.display = 'flex';
+    okMsg.style.display = 'none';
+    listEl.innerHTML = '';
+    missing.forEach((box, idx) => {
+      const label = box.closest('.check-item')?.querySelector('.check-label');
+      const text = label ? label.textContent.replace(/⚡[^)]*\)/g,'').replace(/⚡.*/,'').trim() : '(nieznana pozycja)';
+      const short = text.length > 60 ? text.substring(0,60) + '…' : text;
+
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = 'margin-bottom:8px';
+
+      const item = document.createElement('div');
+      item.className = 'summary-missing-item';
+      item.textContent = '⬜ ' + short;
+      item.style.cssText += ';border-radius:6px 6px 0 0;margin-bottom:0';
+
+      const ta = document.createElement('textarea');
+      ta.placeholder = 'Powód / opis sytuacji (opcjonalnie)…';
+      ta.style.cssText = 'width:100%;background:#1a1005;border:1px solid #92400e;border-top:none;border-radius:0 0 6px 6px;padding:7px 10px;color:#e2e8f0;font-size:12px;font-family:inherit;resize:none;min-height:44px;box-sizing:border-box';
+
+      wrapper.appendChild(item);
+      wrapper.appendChild(ta);
+      listEl.appendChild(wrapper);
+    });
+  }
+
+  // Przycisk potwierdzenia / wysłania mimo braków
+  let confirmBtn = summaryEl.querySelector('.summary-confirm-btn');
+  if (!confirmBtn) {
+    confirmBtn = document.createElement('button');
+    confirmBtn.className = 'btn-submit summary-confirm-btn';
+    confirmBtn.style.cssText = 'width:100%;margin-top:12px;border-radius:12px;padding:12px;font-size:14px';
+    summaryEl.appendChild(confirmBtn);
+  }
+  const pageMap = {'p-open':'p-close','p-close':'p-brygad','p-week':'p-legend'};
+  const nextPage = pageMap[pageId];
+  if (missing.length === 0) {
+    confirmBtn.textContent = '✅ Zatwierdź i przejdź dalej';
+    confirmBtn.onclick = () => { if(nextPage) show(nextPage); };
+  } else {
+    confirmBtn.textContent = '⚠ Wyślij mimo braków (' + missing.length + ' niesprawdzone)';
+    confirmBtn.style.background = '#92400e';
+    confirmBtn.onclick = () => { if(nextPage) show(nextPage); };
+  }
+
+  summaryEl.style.display = 'block';
+  summaryEl.scrollIntoView({behavior:'smooth', block:'nearest'});
+  return missing.length === 0;
+}
+
+function toggleExpand(arrId, subId) {
+  const sub = document.getElementById(subId);
+  if (!sub) return;
+  const open = sub.classList.toggle('open');
+  const arr = document.getElementById(arrId);
+  if (arr) arr.style.transform = open ? 'rotate(90deg)' : 'none';
+}
+
 function toggleQ(checkbox, detailId) {
   const isChecked = checkbox.style.background === 'rgb(45, 106, 79)';
   checkbox.style.background = isChecked ? '#1e2d42' : '#2d6a4f';
@@ -1062,6 +1587,14 @@ function toggleQ(checkbox, detailId) {
   const detail = document.getElementById(detailId);
   if (detail) detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
 }
+
+// ── INIT: ustaw widoczność dla domyślnego miasta (Poznań) na starcie ──
+document.addEventListener('DOMContentLoaded', function() {
+  const pzBtn = document.querySelector('#p-open .city-tab');
+  if (pzBtn) switchCity(pzBtn, 'Poznań');
+  const pzWeekBtn = document.querySelector('#p-week .city-tab');
+  if (pzWeekBtn) switchCityWeek(pzWeekBtn, 'Poznań');
+});
 
 // Synchroniczne pokazywanie/ukrywanie sekcji per miasto na zakładce OTWARCIE
 function switchCity(btn, city) {
@@ -1089,7 +1622,7 @@ function switchCity(btn, city) {
   // NINJA — PZ nie sprawdza rano (sprząta się wieczorem)
   document.getElementById('ninja-dywany').style.display = city === 'Częstochowa' ? 'flex' : 'none';
   document.getElementById('ninja-podstawowe').style.display = city === 'Łódź' ? 'flex' : 'none';
-  document.getElementById('ninja-wwa-open').style.display = (city === 'Warszawa' || city === 'Częstochowa') ? 'flex' : 'none';
+  document.getElementById('ninja-wwa-open').style.display = (city === 'Warszawa' || city === 'Częstochowa' || city === 'Poznań') ? 'flex' : 'none';
   document.getElementById('ninja-siatki-open').style.display = city === 'Częstochowa' ? 'flex' : 'none';
   document.getElementById('ninja-schody').style.display = city === 'Łódź' ? 'flex' : 'none';
 
@@ -1173,6 +1706,13 @@ function switchCity(btn, city) {
   document.getElementById('brygad-cz-section').style.display = city === 'Częstochowa' ? 'block' : 'none';
   // ZAMKNIĘCIE — śmieci wyrzucane rano tylko w PZ
   document.getElementById('zamk-smieci').style.display = city === 'Poznań' ? 'none' : 'flex';
+
+  // PZ OTWARCIE: opis i zdjęcie per strefa
+  ['pz-note-sprz','pz-note-tor-open','pz-note-parkour-open','pz-note-hc-open',
+   'pz-note-pod-open','pz-note-glad-open','pz-note-open-open'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = city === 'Poznań' ? 'block' : 'none';
+  });
 }
 
 // Sub-lokalizacja dla CZ (Park główny / Salka gimnastyczna)
@@ -1239,6 +1779,67 @@ function switchCityWeek(btn, city) {
 
   // AUTOMATY PD — brak sekcji w PZ
   document.getElementById('week-automaty-pd-section').style.display = city === 'Poznań' ? 'none' : 'block';
+
+  // PZ HAPPY CLIMB: ukryj lonże, pokaż strzałki expand
+  document.getElementById('week-hc-lonze').style.display = city === 'Poznań' ? 'none' : 'flex';
+  ['arr-hc-uprzeze','arr-hc-kara','arr-hc-auto'].forEach(id => {
+    document.getElementById(id).style.display = city === 'Poznań' ? 'inline-block' : 'none';
+  });
+  // PZ HAPPY CLIMB: strzałki expand parku linowego
+  ['arr-park-uprzeze','arr-park-lonze'].forEach(id => {
+    document.getElementById(id).style.display = city === 'Poznań' ? 'inline-block' : 'none';
+  });
+
+  // PZ PODUSZKA: ukryj gumę, pokaż pady
+  document.getElementById('week-pod-guma').style.display = city === 'Poznań' ? 'none' : 'flex';
+  document.getElementById('week-pod-pady').style.display = city === 'Poznań' ? 'flex' : 'none';
+  // PZ PODUSZKA: strzałki expand
+  ['arr-pod-spod','arr-pod-rzepy','arr-pod-plachta'].forEach(id => {
+    document.getElementById(id).style.display = city === 'Poznań' ? 'inline-block' : 'none';
+  });
+
+  // PZ AIRTRACK: ukryj schodzące, pokaż zawory
+  document.getElementById('week-air-schodzace').style.display = city === 'Poznań' ? 'none' : 'flex';
+  document.getElementById('week-air-zawory').style.display = city === 'Poznań' ? 'flex' : 'none';
+  ['pz-note-air-przetarcia','pz-note-air-dziury','pz-note-air-zawory','pz-note-week-air'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = city === 'Poznań' ? 'block' : 'none';
+  });
+
+  // PZ TOR PRZESZKÓD: opis i zdjęcie
+  const torNote = document.getElementById('pz-note-week-tor');
+  if (torNote) torNote.style.display = city === 'Poznań' ? 'block' : 'none';
+
+  // PZ TRAMPOLINY: ukryj spódniczki i fiszbiny
+  document.getElementById('week-tramp-spodniczki').style.display = city === 'Poznań' ? 'none' : 'flex';
+  document.getElementById('week-tramp-fiszbiny').style.display = city === 'Poznań' ? 'none' : 'flex';
+  // PZ TRAMPOLINY: sekcja trampolyn zwykłych
+  document.getElementById('week-tramp-zwykle-section').style.display = city === 'Poznań' ? 'block' : 'none';
+  // PZ TRAMPOLINY: opis i zdjęcie
+  const trampSportNote = document.getElementById('pz-note-week-tramp-sport');
+  if (trampSportNote) trampSportNote.style.display = city === 'Poznań' ? 'block' : 'none';
+
+  // PZ ODKURZACZ: podział na typy
+  document.getElementById('week-odkurz-pz').style.display = city === 'Poznań' ? 'block' : 'none';
+  document.getElementById('week-odkurz-other').style.display = city === 'Poznań' ? 'none' : 'block';
+
+  // VALO CLIMB w urządzeniach interaktywnych (PZ + ŁD + WWA)
+  document.getElementById('week-valo-climb-inter').style.display =
+    (city === 'Poznań' || city === 'Łódź' || city === 'Warszawa') ? 'flex' : 'none';
+
+  // PZ INWENTARYZACJA: rozszerzona lista
+  const inwPzFull = document.getElementById('week-inw-pz-full');
+  if (inwPzFull) inwPzFull.style.display = city === 'Poznań' ? 'flex' : 'none';
+
+  // PZ PARK LINOWY: opis i zdjęcie
+  const parkNote = document.getElementById('pz-note-week-park');
+  if (parkNote) parkNote.style.display = city === 'Poznań' ? 'block' : 'none';
+
+  // PZ TYGODNIOWA: opis i zdjęcie per dział
+  ['pz-note-week-hc','pz-note-week-pod'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = city === 'Poznań' ? 'block' : 'none';
+  });
 }
 </script>
 </body>
