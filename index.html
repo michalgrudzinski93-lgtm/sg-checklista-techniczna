@@ -195,17 +195,16 @@
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Koszykówka:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wsady do kosza:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprzątanie śmieci:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto.:</span></div>
+        <div class="check-item" id="sprz-odkurz-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label" id="sprz-odkurz-label">Odkurzacz auto.:</span></div>
         <div class="check-item" id="tv-open"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Włączenie TV:</span></div>
       </div>
       <!-- PZ only: ścieżki trampolinowe -->
       <div class="check-grid-1" id="sprz-pz">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ścieżki trampolinowe (12m):</span></div>
       </div>
-      <!-- ŁD only: Valo Arena + Bawialnia -->
+      <!-- ŁD only: Valo Arena -->
       <div class="check-grid-1" id="sprz-ld" style="display:none">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Valo Arena:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Bawialnia:</span></div>
       </div>
       <!-- Gladiator w sprzątaniu: PZ i WWA wyrzucamy, reszta zostawia -->
       <div class="check-grid-1" id="sprz-glad" style="display:none">
@@ -319,7 +318,6 @@
         <input type="number" class="input-field" placeholder="Wpisz tutaj">
         <div class="check-grid-1" style="margin-top:8px">
           <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Skok testowy: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzanie trampolin zeskokowych:</span></div>
         </div>
       </div>
 
@@ -365,13 +363,26 @@
         <div class="check-item" id="open-wwa-odkurz-tramp" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzanie trampolin:</span></div>
         <!-- ŁD only: piłki + odkurzacz pod trampolinami -->
         <div class="check-item" id="open-ld-pilki" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie piłek:</span></div>
-        <div class="check-item" id="open-ld-odkurz" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz automatyczny pod trampolinami:</span></div>
+        <div class="check-item" id="open-ld-odkurz" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprawdzić odkurzacz automatyczny pod trampolinami:</span></div>
       </div>
       <div class="pz-zone-note" id="pz-note-open-open" style="display:none">
         <textarea placeholder="Opis / uwagi — Open / Trampoliny..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
       </div><!-- /open-tramp-open-section -->
+
+      <!-- ────────────────────────────
+           BAWIALNIA — tylko Łódź
+      ──────────────────────────── -->
+      <div id="bawialnia-open-ld" style="display:none">
+        <div class="section-title">Bawialnia <small style="font-size:11px;color:#64748b">(tylko Łódź)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzanie:</span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie kompresora: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Włączenie świateł:</span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie pontonów i zjazdu: <span class="alert-tag">⚡ ALERT</span></span></div>
+        </div>
+      </div>
 
       <!-- ────────────────────────────
            STREFA PRO (NOWA — wszystkie 4 miasta)
@@ -562,9 +573,12 @@
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wsady do kosza:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Gladiator:</span></div>
       </div>
-      <!-- ŁD only: Bawialnia -->
+      <!-- ŁD only: Bawialnia + Airtrack + Ninja + Schody -->
       <div class="check-grid-1" id="mop-ld" style="display:none">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Bawialnia:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Airtrack:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ninja +1 / +2:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Schody:</span></div>
       </div>
       <!-- WWA only: Air Maxx x2 + Małe PRO + Quad -->
       <div class="check-grid-1" id="mop-wwa" style="display:none">
@@ -627,6 +641,15 @@
       <div class="section-title" id="gokarty-close-title">Gokarty <small style="font-size:11px;color:#64748b">(Poz / Łódź)</small></div>
       <div class="check-grid-1" id="gokarty-close-section">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Podłączenie akumulatorów do ładowania:</span></div>
+      </div>
+
+      <!-- BAWIALNIA — tylko Łódź -->
+      <div id="bawialnia-close-ld" style="display:none">
+        <div class="section-title">Bawialnia <small style="font-size:11px;color:#64748b">(tylko Łódź)</small></div>
+        <div class="check-grid-1">
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyłączenie świateł:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ułożenie pontonów:</span></div>
+        </div>
       </div>
 
       <!-- HOLO/ŚCIANA WARSZAWA -->
@@ -971,8 +994,8 @@
           <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
         </div>
 
-        <!-- KARABIŃCZYKI — base item + PZ expandable -->
-        <div class="check-item">
+        <!-- KARABIŃCZYKI — base item + PZ expandable (ukryte dla ŁD) -->
+        <div class="check-item" id="week-hc-kara-item">
           <div class="check-box alert" onclick="toggle(this)"></div>
           <span class="check-label expand-label" onclick="toggleExpand('arr-hc-kara','sub-hc-kara')">
             Karabińczyki linowe / zatrzaskowe — stan: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span>
@@ -1178,18 +1201,19 @@
         <textarea placeholder="Opis / uwagi — Tor przeszkód tygodniowa..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
-      <!-- Lista ŁD — od lewej: skośne stepy → wałek -->
+      <!-- Lista ŁD — Tor Ninja/OCR elementy wg Kamila -->
       <div class="check-grid" id="week-tor-ld" style="display:none">
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Skośne stepy:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Okienka:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wiszące wałki:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wałek:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przejście przez domek:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Siatka cargo:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Trójkąty poziome:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Trójkąty pionowe:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Slackline:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wałek (końcowy):</span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stepy skośne: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Okienka: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki wiszące: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek poziomy: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Domek: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatka Cargo: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąty poziome: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąty pionowe: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Slackline: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek poziomy (końcowy): <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąt leżący: <span class="alert-tag">⚡ ALERT</span></span></div>
       </div>
       <!-- Lista CZ: Ninja — elementy od lewej strony -->
       <div class="check-grid" id="week-tor-cz" style="display:none">
@@ -1246,7 +1270,7 @@
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / konstrukcja: <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Poziom gąbek w basenie: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wrapy: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item" id="week-ninja-wrapy"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wrapy: <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki (mocowania): <span class="alert-tag">⚡ ALERT</span></span></div>
       </div>
       <div class="pz-zone-note" id="pz-note-week-ninja" style="display:none">
@@ -1254,6 +1278,20 @@
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
       </div><!-- /week-tor-ninja-section -->
+
+      <!-- ───── TOR OCR tygodniowo — tylko ŁD ───── -->
+      <div id="week-tor-ocr-ld" style="display:none">
+        <div class="section-title">Tor OCR — przegląd techniczny <small style="font-size:11px;color:#64748b">(tylko Łódź)</small></div>
+        <div class="check-grid">
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatki: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / konstrukcja: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan przeszkód torowych: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Materace: <span class="alert-tag">⚡ ALERT</span></span></div>
+        </div>
+      </div>
 
       <!-- ───── PARKOUR tygodniowo — tylko PZ ───── -->
       <div id="week-parkour-section">
@@ -1357,7 +1395,7 @@
       </div>
 
       <!-- ───── TRAMPOLINY SPORTOWE I SPRĘŻYNY ───── -->
-      <div class="section-title" id="week-tramp-sport-title">Trampoliny sportowe (AIR MAXX) — przegląd techniczny</div>
+      <div class="section-title" id="week-tramp-sport-title">Trampoliny sportowe — przegląd techniczny</div>
       <div class="check-grid-1">
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan trampoliny (przetarcia, rozdarcia): <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny — stan, naprężenie, brakujące: <span class="alert-tag">⚡ ALERT</span></span></div>
@@ -1486,7 +1524,7 @@
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
+        <div id="week-inw-pilki-inne" style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
           <span class="check-label">Piłki inne:</span>
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
@@ -1506,6 +1544,19 @@
           <span class="check-label">Wałki Gladiator:</span>
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
+        </div>
+        <!-- ŁD EXTRA: Wałek + Air Spot -->
+        <div id="week-inw-ld-extra" style="display:none;flex-direction:column;gap:8px">
+          <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
+            <span class="check-label">Wałek:</span>
+            <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
+            <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
+            <span class="check-label">Air Spot:</span>
+            <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
+            <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
+          </div>
         </div>
         <!-- PZ EXTRA: rozszerzony sprzęt sportowy -->
         <div id="week-inw-pz" style="display:none;display:flex;flex-direction:column;gap:8px">
@@ -1946,7 +1997,12 @@ function switchCity(btn, city) {
   // OPEN — pola per miasto
   document.getElementById('open-wwa-tramp').style.display = city === 'Warszawa' ? 'flex' : 'none';
   document.getElementById('open-wwa-odkurz-tramp').style.display = city === 'Warszawa' ? 'flex' : 'none';
-  document.getElementById('open-ekran-zasad').style.display = (city === 'Częstochowa' || city === 'Poznań') ? 'none' : 'flex';
+  document.getElementById('open-ekran-zasad').style.display = (city === 'Częstochowa' || city === 'Poznań' || city === 'Łódź') ? 'none' : 'flex';
+  // ŁD: Bawialnia otwarcie
+  document.getElementById('bawialnia-open-ld').style.display = city === 'Łódź' ? 'block' : 'none';
+  // ŁD: odkurzacz label
+  const odkurzLabel = document.getElementById('sprz-odkurz-label');
+  if (odkurzLabel) odkurzLabel.textContent = city === 'Łódź' ? 'Opróżnić odkurzacze:' : 'Odkurzacz auto.:';
   document.getElementById('open-ld-pilki').style.display = city === 'Łódź' ? 'flex' : 'none';
   document.getElementById('open-ld-odkurz').style.display = city === 'Łódź' ? 'flex' : 'none';
 
@@ -1956,12 +2012,17 @@ function switchCity(btn, city) {
   if (city === 'Częstochowa') {
     torTitle.innerHTML = 'Tor Ninja <small style="font-size:11px;color:#64748b">(stan codzienny — szczegółowy w tygodniowej)</small>';
     torCheck1.querySelector('.check-label').innerHTML = 'Stan toru Ninja (poziom gąbek, stan przeszkód): <span class="alert-tag">⚡ ALERT</span>';
+  } else if (city === 'Łódź') {
+    torTitle.innerHTML = 'Tor Ninja/OCR <small style="font-size:11px;color:#64748b">(stan codzienny — szczegółowy w tygodniowej)</small>';
+    torCheck1.querySelector('.check-label').innerHTML = 'Stan toru Ninja/OCR — przegląd ogólny: <span class="alert-tag">⚡ ALERT</span>';
   } else {
     torTitle.innerHTML = 'Tor przeszkód <small style="font-size:11px;color:#64748b">(stan codzienny — szczegółowy w tygodniowej)</small>';
     torCheck1.querySelector('.check-label').innerHTML = 'Stan toru przeszkód — przegląd ogólny: <span class="alert-tag">⚡ ALERT</span>';
   }
-  // CZ: ukryj siatki wokół basenu z gąbkami
-  document.getElementById('ninja-siatki-open').style.display = city === 'Częstochowa' ? 'none' : 'flex';
+  // CZ + ŁD: ukryj siatki wokół basenu z gąbkami
+  document.getElementById('ninja-siatki-open').style.display = (city === 'Częstochowa' || city === 'Łódź') ? 'none' : 'flex';
+  // ŁD: ukryj siatki na torze
+  document.getElementById('tor-siatki-open').style.display = (city === 'Częstochowa' || city === 'Łódź') ? 'none' : 'flex';
   // CZ: ukryj przetarcie ekranów ValoJump
   document.getElementById('valo-jump-ekrany').style.display = city === 'Częstochowa' ? 'none' : 'flex';
 
@@ -2009,12 +2070,14 @@ function switchCity(btn, city) {
   document.getElementById('mop-ld').style.display = city === 'Łódź' ? 'flex' : 'none';
   document.getElementById('mop-wwa').style.display = city === 'Warszawa' ? 'flex' : 'none';
   document.getElementById('mop-cz').style.display = city === 'Częstochowa' ? 'flex' : 'none';
-  document.getElementById('zamk-odkurz-noc').style.display = city === 'Warszawa' ? 'none' : 'flex';
+  document.getElementById('zamk-odkurz-noc').style.display = (city === 'Warszawa' || city === 'Łódź') ? 'none' : 'flex';
+  // ŁD: Bawialnia zamknięcie
+  document.getElementById('bawialnia-close-ld').style.display = city === 'Łódź' ? 'block' : 'none';
   document.getElementById('ninja-close-pz').style.display = city === 'Poznań' ? 'block' : 'none';
   document.getElementById('ninja-close-other').style.display = city !== 'Poznań' ? 'block' : 'none';
-  document.getElementById('ninja-close-multi').style.display = (city === 'Warszawa' || city === 'Częstochowa') ? 'none' : 'flex';
+  document.getElementById('ninja-close-multi').style.display = (city === 'Warszawa' || city === 'Częstochowa' || city === 'Łódź') ? 'none' : 'flex';
   document.getElementById('ninja-close-wwa').style.display = (city === 'Warszawa' || city === 'Częstochowa') ? 'flex' : 'none';
-  document.getElementById('ninja-close-schody').style.display = city === 'Łódź' ? 'flex' : 'none';
+  document.getElementById('ninja-close-schody').style.display = 'none'; // ŁD: Schody przeniesione do Mopowania
   document.getElementById('zamk-tor-ninja').style.display = (city === 'Łódź' || city === 'Warszawa' || city === 'Częstochowa') ? 'none' : 'flex';
   document.getElementById('zamk-tv').style.display = city === 'Łódź' ? 'none' : 'flex';
   document.getElementById('happy-close-swiatla').style.display = city === 'Warszawa' ? 'none' : 'flex';
@@ -2148,8 +2211,15 @@ function switchCityWeek(btn, city) {
   const inwPzFull = document.getElementById('week-inw-pz-full');
   if (inwPzFull) inwPzFull.style.display = city === 'Poznań' ? 'flex' : 'none';
 
-  // WWA: lonże na Happy Climb — brak
+  // WWA: lonże na Happy Climb — brak; ŁD: karabińczyki HC — brak
   document.getElementById('week-hc-lonze').style.display = (city === 'Poznań' || city === 'Warszawa') ? 'none' : 'flex';
+  const hcKaraItem = document.getElementById('week-hc-kara-item');
+  if (hcKaraItem) hcKaraItem.style.display = city === 'Łódź' ? 'none' : 'flex';
+  // ŁD: Wrapy w Tor Ninja — brak
+  const ninjaWrapy = document.getElementById('week-ninja-wrapy');
+  if (ninjaWrapy) ninjaWrapy.style.display = city === 'Łódź' ? 'none' : 'flex';
+  // ŁD: Tor OCR sekcja
+  document.getElementById('week-tor-ocr-ld').style.display = city === 'Łódź' ? 'block' : 'none';
 
   // WWA: SpringFloor tygodniowo
   document.getElementById('week-springfloor-section').style.display = city === 'Warszawa' ? 'block' : 'none';
@@ -2173,11 +2243,16 @@ function switchCityWeek(btn, city) {
     ? 'Poduszka / Airbag — przegląd techniczny'
     : 'Poduszki / Airbag — przegląd techniczny';
 
-  // CZ + WWA: kije/rakietki — brak
-  document.getElementById('week-inw-kije').style.display = (city === 'Częstochowa' || city === 'Warszawa') ? 'none' : 'grid';
-
+  // CZ + WWA + ŁD: kije/rakietki — brak
+  document.getElementById('week-inw-kije').style.display = (city === 'Częstochowa' || city === 'Warszawa' || city === 'Łódź') ? 'none' : 'grid';
   // kamizelki/akcesoria — usunięte globalnie
   document.getElementById('week-inw-kamizelki').style.display = 'none';
+  // ŁD: Piłki inne — brak
+  const pilkiInne = document.getElementById('week-inw-pilki-inne');
+  if (pilkiInne) pilkiInne.style.display = city === 'Łódź' ? 'none' : 'grid';
+  // ŁD: Wałek + Air Spot
+  const ldExtra = document.getElementById('week-inw-ld-extra');
+  if (ldExtra) ldExtra.style.display = city === 'Łódź' ? 'flex' : 'none';
 
   // CZ: Wałki Gladiator — tylko CZ
   document.getElementById('week-inw-walki-glad').style.display = city === 'Częstochowa' ? 'grid' : 'none';
