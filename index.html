@@ -48,6 +48,21 @@
   .check-box.checked::after{content:'✓';color:#4ade80;font-size:13px;font-weight:700}
   .check-box.alert{border-color:#ef4444}
 
+  /* ── ALERT ITEMS FIRST (w obu grid i flex) ── */
+  .check-item.tc-done,
+  .check-item:has(.check-box.alert) { order: -1; }
+
+  /* ── TECHNICAL CHECK UI ── */
+  .check-item.tc-done{flex-direction:column;align-items:flex-start;gap:6px;padding:8px 0 10px;border-bottom:1px solid #1e2d42}
+  .tc-label{font-size:14px;color:#e2e8f0;line-height:1.4;width:100%}
+  .tc-btns,.tc-result{display:flex;gap:6px;flex-wrap:wrap}
+  .tc-btn{padding:5px 16px;border-radius:7px;border:1.5px solid #3d5a7a;background:#0d1b2a;color:#94a3b8;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+  .tc-btn:hover{background:#1e2d42;color:#e2e8f0}
+  .tc-active-tak,.tc-active-ok{background:#2d6a4f!important;border-color:#4ade80!important;color:#4ade80!important}
+  .tc-active-nie,.tc-active-dmg{background:#7f1d1d!important;border-color:#ef4444!important;color:#fca5a5!important}
+  .tc-damage{flex-direction:column;gap:6px;width:100%}
+  .tc-nie-note{font-size:12px;color:#fca5a5;padding:2px 0}
+
   /* ── INPUT FIELD ── */
   .input-field{width:100%;background:#1e2d42;border:1px solid #2d4a6a;border-radius:8px;padding:10px 14px;color:#94a3b8;font-size:14px;margin-top:6px}
   .input-field::placeholder{color:#4a6080}
@@ -1574,15 +1589,18 @@
      PAGE 5 — LEGENDA
 ═══════════════════════════════════════════════ -->
 <div class="page" id="p-legend">
-  <div class="page-title">Legenda dla IT (v1.2)</div>
+  <div class="page-title">Legenda dla IT (v1.4)</div>
   <div class="frame">
     <div class="card-mid legend">
-      <strong>Wzorzec UI dla IT — Stacja Grawitacja (v1.3-PZ)</strong><br>
+      <strong>Wzorzec UI dla IT — Stacja Grawitacja (v1.4)</strong><br>
       Dokument pokazuje dokładny wygląd i układ formularzy do wdrożenia w aplikacji.<br>
-      <strong>Zaktualizowano 2026-05-29</strong> — iteracja Poznań: expandable sub-checki (karabińczyki/automaty HC ze ściankami, uprzęże HC i PL z rozmiarami, lonże PL z komponentami, poduszki per typ, stan przeszkód ninja), sekcja trampolyn zwykłych PZ, podział odkurzacza na typy, rozszerzona inwentaryzacja PZ (32 pozycje), opis+zdjęcie per strefa.<br><br>
+      <strong>Zaktualizowano 2026-06-02</strong> — WWA + CZ + PZ batch: Tor Ninja (CZ), Euro Tramp (CZ), Salka do tygodniowej (CZ), SpringFloor (WWA), Quad/PRO/liny (WWA), noty opis+zdjęcie dla Poznania (Tor Ninja, Urządzenia interaktywne). <strong>Nowy system checkboxów:</strong> pozycje sprzątania = klasyczny checkbox; pozycje stanu technicznego (⚡) = przyciski TAK/NIE → OK/Uszkodzenie → opis+zdjęcie. Alerty wyświetlają się pierwsze w każdej sekcji.<br><br>
 
-      <strong>Elementy interaktywne:</strong><br>
-      ☐ Checkbox kwadratowy — stan domyślny NIE<br>
+      <strong>Dwa typy checkboxów:</strong><br>
+      ☐ <strong>Sprzątanie</strong> — zwykłe pole, zaznacz gdy wykonane<br>
+      🔲 <strong>Stan techniczny (⚡)</strong> — najpierw wybierz: <strong>[✓ TAK]</strong> sprawdzono / <strong>[✗ NIE]</strong> nie sprawdzono. Po TAK: <strong>[✓ OK]</strong> lub <strong>[⚠ Uszkodzenie]</strong> → opis + zdjęcie. Po NIE: komunikat "zweryfikować przy kolejnej zmianie".<br><br>
+
+      <strong>Pozostałe elementy interaktywne:</strong><br>
       ☑ Checkbox zaznaczony (zielony) — TAK<br>
       📷 Upload zdjęcia — opcjonalnie, JPG/PNG, max 2 pliki<br>
       🔢 Pole liczbowe — np. ciśnienie<br>
@@ -1669,6 +1687,68 @@ function toggle(el) {
   el.classList.toggle('checked');
 }
 
+// Transformuje check-itemy z alertem w UI techniczny (TAK/NIE)
+function initTechChecks() {
+  document.querySelectorAll('.check-item').forEach(item => {
+    if (item.classList.contains('tc-done')) return;
+    if (item.closest('.sub-checklist')) return;
+    if (item.querySelector('.expand-label')) return; // expandable items zostawiamy bez zmian
+    const alertBox = item.querySelector('.check-box.alert');
+    if (!alertBox) return;
+    const labelEl = item.querySelector('.check-label');
+    if (!labelEl) return;
+    const labelHTML = labelEl.innerHTML;
+    item.classList.add('tc-done');
+    item.innerHTML =
+      `<div class="tc-label">${labelHTML}</div>` +
+      `<div class="tc-btns">` +
+        `<button class="tc-btn" onclick="tcTak(this)">✓ TAK</button>` +
+        `<button class="tc-btn" onclick="tcNie(this)">✗ NIE</button>` +
+      `</div>` +
+      `<div class="tc-result" style="display:none">` +
+        `<button class="tc-btn" onclick="tcOk(this)">✓ OK</button>` +
+        `<button class="tc-btn" onclick="tcDmg(this)">⚠ Uszkodzenie</button>` +
+      `</div>` +
+      `<div class="tc-damage" style="display:none;flex-direction:column;gap:6px;width:100%">` +
+        `<textarea class="input-field" placeholder="Opis uszkodzenia..." style="min-height:60px;margin-top:0"></textarea>` +
+        `<div class="photo-upload-btn" style="margin-top:4px">📷 Dodaj zdjęcie</div>` +
+      `</div>` +
+      `<div class="tc-nie-note" style="display:none">⚠️ Nie sprawdzono — zweryfikować przy kolejnej zmianie</div>`;
+  });
+}
+
+function tcTak(btn) {
+  const item = btn.closest('.check-item');
+  item.querySelectorAll('.tc-btns .tc-btn').forEach(b => b.classList.remove('tc-active-tak','tc-active-nie'));
+  btn.classList.add('tc-active-tak');
+  item.querySelector('.tc-result').style.display = 'flex';
+  item.querySelector('.tc-nie-note').style.display = 'none';
+  item.dataset.tcState = 'tak';
+}
+function tcNie(btn) {
+  const item = btn.closest('.check-item');
+  item.querySelectorAll('.tc-btns .tc-btn').forEach(b => b.classList.remove('tc-active-tak','tc-active-nie'));
+  btn.classList.add('tc-active-nie');
+  item.querySelector('.tc-result').style.display = 'none';
+  item.querySelector('.tc-damage').style.display = 'none';
+  item.querySelector('.tc-nie-note').style.display = 'block';
+  item.dataset.tcState = 'nie';
+}
+function tcOk(btn) {
+  const item = btn.closest('.check-item');
+  item.querySelectorAll('.tc-result .tc-btn').forEach(b => b.classList.remove('tc-active-ok','tc-active-dmg'));
+  btn.classList.add('tc-active-ok');
+  item.querySelector('.tc-damage').style.display = 'none';
+  item.dataset.tcState = 'ok';
+}
+function tcDmg(btn) {
+  const item = btn.closest('.check-item');
+  item.querySelectorAll('.tc-result .tc-btn').forEach(b => b.classList.remove('tc-active-ok','tc-active-dmg'));
+  btn.classList.add('tc-active-dmg');
+  item.querySelector('.tc-damage').style.display = 'flex';
+  item.dataset.tcState = 'uszkodzenie';
+}
+
 // Buduje podsumowanie przed zatwierdzeniem checklisty
 // pageId: id diva strony, summaryId: id kontenera podsumowania
 function buildSummary(pageId, summaryId) {
@@ -1676,21 +1756,49 @@ function buildSummary(pageId, summaryId) {
   const summaryEl = document.getElementById(summaryId);
   if (!page || !summaryEl) return true;
 
-  // Zbieramy wszystkie widoczne checkboxy (nie sub-checklist, nie q-checkbox)
-  const allBoxes = Array.from(page.querySelectorAll('.check-box:not(.sub-checklist .check-box)'))
-    .filter(box => {
-      // Sprawdź czy box jest widoczny (jego rodzice też)
-      let el = box;
-      while (el && el !== page) {
-        if (el.style.display === 'none') return false;
-        el = el.parentElement;
-      }
-      return true;
-    });
+  function isVisible(el) {
+    let cur = el;
+    while (cur && cur !== page) {
+      if (cur.style.display === 'none') return false;
+      cur = cur.parentElement;
+    }
+    return true;
+  }
 
-  const total = allBoxes.length;
-  const checked = allBoxes.filter(b => b.classList.contains('checked')).length;
-  const missing = allBoxes.filter(b => !b.classList.contains('checked'));
+  // 1. Proste checkboxy (sprzątanie) — nie w sub-checkliście
+  const allBoxes = Array.from(page.querySelectorAll('.check-box:not(.sub-checklist .check-box)'))
+    .filter(isVisible);
+
+  // 2. Techniczne check-itemy (tc-done)
+  const allTechItems = Array.from(page.querySelectorAll('.check-item.tc-done'))
+    .filter(isVisible);
+
+  const total = allBoxes.length + allTechItems.length;
+  const checkedBoxes = allBoxes.filter(b => b.classList.contains('checked'));
+  const checkedTech = allTechItems.filter(i => i.dataset.tcState && i.dataset.tcState !== 'nie');
+  const checked = checkedBoxes.length + checkedTech.length;
+
+  // Brakujące: niezaznaczone checkboxy + tech bez odpowiedzi lub NIE
+  const missingBoxes = allBoxes.filter(b => !b.classList.contains('checked'));
+  const missingTech = allTechItems.filter(i => !i.dataset.tcState || i.dataset.tcState === 'nie');
+
+  // Ujednolicona lista "missing" — każdy ma .getLabel()
+  const missing = [
+    ...missingBoxes.map(b => ({
+      getLabel: () => {
+        const label = b.closest('.check-item')?.querySelector('.check-label');
+        return label ? label.textContent : '(nieznana pozycja)';
+      },
+      isNie: false
+    })),
+    ...missingTech.map(i => ({
+      getLabel: () => {
+        const label = i.querySelector('.tc-label');
+        return label ? label.textContent : '(nieznana pozycja)';
+      },
+      isNie: i.dataset.tcState === 'nie'
+    }))
+  ];
 
   // Buduj HTML
   const scoreEl = summaryEl.querySelector('.summary-score');
@@ -1711,17 +1819,17 @@ function buildSummary(pageId, summaryId) {
     listEl.style.display = 'flex';
     okMsg.style.display = 'none';
     listEl.innerHTML = '';
-    missing.forEach((box, idx) => {
-      const label = box.closest('.check-item')?.querySelector('.check-label');
-      const text = label ? label.textContent.replace(/⚡[^)]*\)/g,'').replace(/⚡.*/,'').trim() : '(nieznana pozycja)';
+    missing.forEach((entry) => {
+      const text = entry.getLabel().replace(/⚡[^)]*\)/g,'').replace(/⚡.*/,'').trim();
       const short = text.length > 60 ? text.substring(0,60) + '…' : text;
+      const prefix = entry.isNie ? '🔴 Nie sprawdzono: ' : '⬜ ';
 
       const wrapper = document.createElement('div');
       wrapper.style.cssText = 'margin-bottom:8px';
 
       const item = document.createElement('div');
       item.className = 'summary-missing-item';
-      item.textContent = '⬜ ' + short;
+      item.textContent = prefix + short;
       item.style.cssText += ';border-radius:6px 6px 0 0;margin-bottom:0';
 
       const ta = document.createElement('textarea');
@@ -1781,6 +1889,7 @@ function toggleQ(checkbox, detailId) {
 
 // ── INIT: ustaw widoczność dla domyślnego miasta (Poznań) na starcie ──
 document.addEventListener('DOMContentLoaded', function() {
+  initTechChecks(); // transformuj alert-itemy w UI techniczny (TAK/NIE)
   const pzBtn = document.querySelector('#p-open .city-tab');
   if (pzBtn) switchCity(pzBtn, 'Poznań');
   const pzWeekBtn = document.querySelector('#p-week .city-tab');
@@ -1814,7 +1923,6 @@ function switchCity(btn, city) {
   document.getElementById('ninja-dywany').style.display = city === 'Częstochowa' ? 'flex' : 'none';
   document.getElementById('ninja-podstawowe').style.display = city === 'Łódź' ? 'flex' : 'none';
   document.getElementById('ninja-wwa-open').style.display = (city === 'Warszawa' || city === 'Częstochowa' || city === 'Poznań') ? 'flex' : 'none';
-  document.getElementById('ninja-siatki-open').style.display = city === 'Częstochowa' ? 'flex' : 'none';
   document.getElementById('ninja-schody').style.display = city === 'Łódź' ? 'flex' : 'none';
 
   // TOR PRZESZKÓD OTWARCIE — ukryty dla WWA; siatki ukryte dla CZ
