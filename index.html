@@ -1543,11 +1543,7 @@
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
           <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
         </div>
-        <div id="week-inw-kije" style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
-          <span class="check-label">Kije / rakietki:</span>
-          <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
-          <select style="background:#1e2d42;border:1px solid #2d4a6a;color:#94a3b8;border-radius:8px;padding:6px 8px;font-size:12px"><option>OK</option><option>Zużyty</option><option>Uszkodzony ⚡</option></select>
-        </div>
+        <!-- week-inw-kije USUNIĘTE — brak w żadnym mieście (feedback ŁD/CZ/PZ/WWA) -->
         <div id="week-inw-kamizelki" style="display:grid;grid-template-columns:1fr 70px 120px;gap:6px;align-items:center">
           <span class="check-label">Kamizelki / akcesoria:</span>
           <input type="number" class="input-field" style="padding:6px 8px;font-size:13px;text-align:center" placeholder="szt.">
@@ -2269,7 +2265,7 @@ function switchCityWeek(btn, city) {
     : 'Poduszki / Airbag — przegląd techniczny';
 
   // CZ + WWA + ŁD: kije/rakietki — brak
-  document.getElementById('week-inw-kije').style.display = 'none'; // usunięto dla wszystkich miast (PZ feedback)
+  // week-inw-kije usunięte z HTML — brak kijów/rakietek w żadnym mieście
   // kamizelki/akcesoria — usunięte globalnie
   document.getElementById('week-inw-kamizelki').style.display = 'none';
   // ŁD: Piłki inne — brak
