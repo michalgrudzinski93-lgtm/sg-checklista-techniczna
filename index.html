@@ -2026,15 +2026,17 @@ function switchCity(btn, city) {
   // CZ: Tor Ninja (zmiana nazwy sekcji i checkboxów)
   const torTitle = document.getElementById('tor-open-title');
   const torCheck1 = document.getElementById('tor-open-check1');
+  // initTechChecks() zmienia .check-label na .tc-label — używamy obu selektorów
+  const torLabelEl = torCheck1.querySelector('.tc-label') || torCheck1.querySelector('.check-label');
   if (city === 'Częstochowa') {
     torTitle.innerHTML = 'Tor Ninja <small style="font-size:11px;color:#64748b">(stan codzienny — szczegółowy w tygodniowej)</small>';
-    torCheck1.querySelector('.check-label').innerHTML = 'Stan toru Ninja (poziom gąbek, stan przeszkód): <span class="alert-tag">⚡ ALERT</span>';
+    if (torLabelEl) torLabelEl.innerHTML = 'Stan toru Ninja (poziom gąbek, stan przeszkód): <span class="alert-tag">⚡ ALERT</span>';
   } else if (city === 'Łódź') {
     torTitle.innerHTML = 'Tor Ninja/OCR <small style="font-size:11px;color:#64748b">(stan codzienny — szczegółowy w tygodniowej)</small>';
-    torCheck1.querySelector('.check-label').innerHTML = 'Stan toru Ninja/OCR — przegląd ogólny: <span class="alert-tag">⚡ ALERT</span>';
+    if (torLabelEl) torLabelEl.innerHTML = 'Stan toru Ninja/OCR — przegląd ogólny: <span class="alert-tag">⚡ ALERT</span>';
   } else {
     torTitle.innerHTML = 'Tor przeszkód <small style="font-size:11px;color:#64748b">(stan codzienny — szczegółowy w tygodniowej)</small>';
-    torCheck1.querySelector('.check-label').innerHTML = 'Stan toru przeszkód — przegląd ogólny: <span class="alert-tag">⚡ ALERT</span>';
+    if (torLabelEl) torLabelEl.innerHTML = 'Stan toru przeszkód — przegląd ogólny: <span class="alert-tag">⚡ ALERT</span>';
   }
   // CZ + ŁD: ukryj siatki wokół basenu z gąbkami
   document.getElementById('ninja-siatki-open').style.display = 'none'; // brak siatek we wszystkich miastach
