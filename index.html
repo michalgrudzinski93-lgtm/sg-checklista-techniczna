@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SG — Wzorzec Checklisty dla IT (v1.3-PZ)</title>
+<title>SG — Wzorzec Checklisty dla IT (v1.5)</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e2e8f0;min-height:100vh}
@@ -503,7 +503,7 @@
       <!-- ────────────────────────────
            GOKARTY — PZ / ŁD (checkbox zamiast pomiaru)
       ──────────────────────────── -->
-      <div id="gokarty-section">
+      <div id="gokarty-section" style="display:none">
         <div class="section-title">Gokarty <small style="font-size:11px;color:#64748b">(Poz / Łódź)</small></div>
         <div class="check-grid-1">
           <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Przejazd próbny: <span class="alert-tag">⚡ ALERT</span></span></div>
@@ -577,7 +577,7 @@
       <div class="check-grid-1" id="mop-ld" style="display:none">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Bawialnia:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Airtrack:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ninja +1 / +2:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ninja:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Schody:</span></div>
       </div>
       <!-- WWA only: Air Maxx x2 + Małe PRO + Quad -->
@@ -588,11 +588,14 @@
       </div>
       <!-- PZ only: Wieże D/M, Ścieżki, Valo, Tracki -->
       <div class="check-grid-1" id="mop-pz" style="display:none">
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wieża Duża:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wieża Mała:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Duża Wieża:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Mała Wieża:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ścieżki trampolinowe:</span></div>
-        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Valo:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Valo Climb:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Valo Jump:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Tracki:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">siatkówki:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">komunikacja:</span></div>
       </div>
       <!-- CZ only: Ninja + Airtrack przy ściankach -->
       <div class="check-grid-1" id="mop-cz" style="display:none">
@@ -638,8 +641,8 @@
       </div>
 
       <!-- GOKARTY (PZ/ŁD) -->
-      <div class="section-title" id="gokarty-close-title">Gokarty <small style="font-size:11px;color:#64748b">(Poz / Łódź)</small></div>
-      <div class="check-grid-1" id="gokarty-close-section">
+      <div class="section-title" id="gokarty-close-title" style="display:none">Gokarty <small style="font-size:11px;color:#64748b">(Poz / Łódź)</small></div>
+      <div class="check-grid-1" id="gokarty-close-section" style="display:none">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Podłączenie akumulatorów do ładowania:</span></div>
       </div>
 
@@ -769,7 +772,7 @@
       <div class="question">
         <div class="q-row">
           <span class="q-num">4.</span>
-          <span class="q-text">Czy doszło do awarii VALO? <span style="color:#64748b;font-size:11px">(Łódź/Wwa: lub HOLO/iWall)</span> <span class="alert-tag">⚡ tech lok. + Michał</span></span>
+          <span class="q-text">Czy doszło do awarii VALO? <span style="color:#64748b;font-size:11px">(Łódź/Wwa: lub HOLO/iWall)</span> <span class="alert-tag">⚡ lok. manager + Michał</span></span>
           <div class="q-checkbox" onclick="toggleQ(this,'q4-detail')"></div>
         </div>
         <div id="q4-detail" style="display:none;padding-left:24px">
@@ -820,7 +823,6 @@
         </div>
         <textarea class="detail-input" placeholder="Wolne pole — brak alertu..."></textarea>
       </div>
-    </div>
     </div>
     <div class="bottom-row">
       <button class="btn-cancel" onclick="show('p-close')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
@@ -889,7 +891,7 @@
       <div class="question">
         <div class="q-row">
           <span class="q-num">4.</span>
-          <span class="q-text">Czy doszło do awarii VALO? <span style="color:#64748b;font-size:11px">(Łódź/Wwa: lub HOLO/iWall)</span> <span class="alert-tag">⚡ tech lok. + Michał</span></span>
+          <span class="q-text">Czy doszło do awarii VALO? <span style="color:#64748b;font-size:11px">(Łódź/Wwa: lub HOLO/iWall)</span> <span class="alert-tag">⚡ lok. manager + Michał</span></span>
           <div class="q-checkbox" onclick="toggleQ(this,'q4b-detail')"></div>
         </div>
         <div id="q4b-detail" style="display:none;padding-left:24px">
@@ -935,7 +937,6 @@
         <textarea class="detail-input" placeholder="Wolne pole — brak alertu..."></textarea>
       </div>
     </div>
-    </div>
     <div class="bottom-row">
       <button class="btn-cancel" onclick="switchShift(1)"><div class="btn-dot"></div> Wróć — Zmiana 1</button>
       <button class="btn-submit" onclick="show('p-week')">Zatwierdź <div class="btn-dot"></div></button>
@@ -972,6 +973,7 @@
       </div>
 
       <!-- ───── HAPPY CLIMB tygodniowo (uprzęże + lonże + karabińczyki + automaty) ───── -->
+      <div id="week-hc-section-wrap">
       <div class="section-title">Happy Climb — przegląd techniczny</div>
       <div class="check-grid-1">
 
@@ -1055,6 +1057,7 @@
 
       </div>
       <!-- PZ: opis i zdjęcie per dział (tygodniowa) -->
+      </div>  <!-- /week-hc-section-wrap -->
       <div class="pz-zone-note" id="pz-note-week-hc" style="display:none">
         <textarea placeholder="Opis / uwagi — Happy Climb tygodniowa..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
@@ -1064,16 +1067,17 @@
       </div>
 
       <!-- ───── PODUSZKI tygodniowo ───── -->
+      <div id="week-pod-section-wrap">
       <div class="section-title" id="week-pod-title">Poduszki / Airbag — przegląd techniczny</div>
       <div class="check-grid-1">
         <!-- Guma poduszek — ukryta dla PZ -->
-        <div class="check-item" id="week-pod-guma"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Guma poduszek: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item" id="week-pod-guma"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Guma poduszek: <span class="alert-tag">⚡ tech lok.</span></span></div>
 
         <!-- Spódniczki — z PZ expandable -->
         <div class="check-item">
           <div class="check-box alert" onclick="toggle(this)"></div>
           <span class="check-label expand-label" onclick="toggleExpand('arr-pod-spod','sub-pod-spod')">
-            Spódniczki: <span class="alert-tag">⚡ ALERT</span>
+            Spódniczki: <span class="alert-tag">⚡ tech lok.</span>
             <span class="expand-arr" id="arr-pod-spod" style="display:none">▶</span>
           </span>
         </div>
@@ -1089,7 +1093,7 @@
         <div class="check-item">
           <div class="check-box alert" onclick="toggle(this)"></div>
           <span class="check-label expand-label" onclick="toggleExpand('arr-pod-rzepy','sub-pod-rzepy')">
-            Rzepy: <span class="alert-tag">⚡ ALERT</span>
+            Rzepy: <span class="alert-tag">⚡ tech lok.</span>
             <span class="expand-arr" id="arr-pod-rzepy" style="display:none">▶</span>
           </span>
         </div>
@@ -1105,7 +1109,7 @@
         <div class="check-item">
           <div class="check-box alert" onclick="toggle(this)"></div>
           <span class="check-label expand-label" onclick="toggleExpand('arr-pod-plachta','sub-pod-plachta')">
-            Płachta: <span class="alert-tag">⚡ ALERT</span>
+            Płachta: <span class="alert-tag">⚡ tech lok.</span>
             <span class="expand-arr" id="arr-pod-plachta" style="display:none">▶</span>
           </span>
         </div>
@@ -1121,7 +1125,7 @@
         <div class="check-item" id="week-pod-pady" style="display:none">
           <div class="check-box alert" onclick="toggle(this)"></div>
           <span class="check-label expand-label" onclick="toggleExpand('arr-pod-pady','sub-pod-pady')">
-            Pady wokół poduszki: <span class="alert-tag">⚡ ALERT</span>
+            Pady wokół poduszki: <span class="alert-tag">⚡ tech lok.</span>
             <span class="expand-arr" id="arr-pod-pady">▶</span>
           </span>
         </div>
@@ -1135,6 +1139,7 @@
 
       </div>
       <!-- PZ: opis i zdjęcie per dział -->
+      </div>  <!-- /week-pod-section-wrap -->
       <div class="pz-zone-note" id="pz-note-week-pod" style="display:none">
         <textarea placeholder="Opis / uwagi — Poduszki tygodniowa..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
@@ -1144,10 +1149,11 @@
       </div>
 
       <!-- ───── AIRTRACK / STREFA PRO tygodniowo ───── -->
+      <div id="week-air-section-wrap">
       <div class="section-title">AirTrack / Strefa PRO — stan techniczny</div>
       <div class="check-grid-1">
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div>
-          <span class="check-label">Przetarcia airtracków: <span class="alert-tag">⚡ ALERT</span></span>
+          <span class="check-label">Przetarcia airtracków: <span class="alert-tag">⚡ tech lok.</span></span>
         </div>
         <!-- PZ: opis i zdjęcie po każdym checku -->
         <div class="pz-zone-note" id="pz-note-air-przetarcia" style="display:none">
@@ -1155,17 +1161,17 @@
           <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
         </div>
         <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div>
-          <span class="check-label">Dziury w airtrackach: <span class="alert-tag">⚡ ALERT</span></span>
+          <span class="check-label">Dziury w airtrackach: <span class="alert-tag">⚡ tech lok.</span></span>
         </div>
         <div class="pz-zone-note" id="pz-note-air-dziury" style="display:none">
           <textarea placeholder="Opis / lokalizacja dziury..."></textarea>
           <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
         </div>
         <!-- Schodzące powietrze — ukryte dla PZ -->
-        <div class="check-item" id="week-air-schodzace"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Schodzące powietrze (test szczelności): <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item" id="week-air-schodzace"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Schodzące powietrze (test szczelności): <span class="alert-tag">⚡ tech lok.</span></span></div>
         <!-- Sprawdzenie szczelności w zaworach — tylko PZ -->
         <div class="check-item" id="week-air-zawory" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div>
-          <span class="check-label">Sprawdzenie szczelności w zaworach: <span class="alert-tag">⚡ ALERT</span></span>
+          <span class="check-label">Sprawdzenie szczelności w zaworach: <span class="alert-tag">⚡ tech lok.</span></span>
         </div>
         <div class="pz-zone-note" id="pz-note-air-zawory" style="display:none">
           <textarea placeholder="Opis / który zawór..."></textarea>
@@ -1173,6 +1179,7 @@
         </div>
       </div>
       <!-- PZ: opis i zdjęcie per dział -->
+      </div>  <!-- /week-air-section-wrap -->
       <div class="pz-zone-note" id="pz-note-week-air" style="display:none">
         <textarea placeholder="Opis / uwagi — AirTrack tygodniowa..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
@@ -1185,16 +1192,16 @@
       <div class="section-title" id="week-tor-title-cz" style="display:none">Ninja — przegląd elementów</div>
       <!-- Domyślna lista (PZ) — wszystko z alertem -->
       <div class="check-grid" id="week-tor-default">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 1: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 2: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki pionowe: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki poziome: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 3: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Okienka: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trampoliny toru: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pady: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Materace: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatki: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 1: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 2: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki pionowe: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki poziome: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek 3: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Okienka: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trampoliny toru: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pady: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Materace: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatki: <span class="alert-tag">⚡ tech lok.</span></span></div>
       </div>
       <!-- PZ: opis i zdjęcie dla Tor przeszkód tygodniowa -->
       <div class="pz-zone-note" id="pz-note-week-tor" style="display:none">
@@ -1203,17 +1210,17 @@
       </div>
       <!-- Lista ŁD — Tor Ninja/OCR elementy wg Kamila -->
       <div class="check-grid" id="week-tor-ld" style="display:none">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stepy skośne: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Okienka: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki wiszące: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek poziomy: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Domek: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatka Cargo: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąty poziome: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąty pionowe: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Slackline: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek poziomy (końcowy): <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąt leżący: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stepy skośne: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Okienka: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałki wiszące: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek poziomy: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Domek: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatka Cargo: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąty poziome: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąty pionowe: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Slackline: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wałek poziomy (końcowy): <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trójkąt leżący: <span class="alert-tag">⚡ tech lok.</span></span></div>
       </div>
       <!-- Lista CZ: Ninja — elementy od lewej strony -->
       <div class="check-grid" id="week-tor-cz" style="display:none">
@@ -1230,8 +1237,8 @@
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Obejmy:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Stelaż:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Rury:</span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Poziom gąbek w basenie: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Miękkie pady dookoła basenu: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Poziom gąbek w basenie: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Miękkie pady dookoła basenu: <span class="alert-tag">⚡ tech lok.</span></span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Trapy:</span></div>
       </div>
       </div><!-- /week-tor-section -->
@@ -1241,9 +1248,9 @@
       <div class="section-title">Tor Ninja — przegląd elementów</div>
       <div class="check-grid">
         <!-- PZ / CZ / WWA: przeszkody na pasach -->
-        <div class="check-item" id="week-ninja-pasy"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pasy na których wiszą przeszkody: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item" id="week-ninja-pasy"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Pasy na których wiszą przeszkody: <span class="alert-tag">⚡ tech lok.</span></span></div>
         <!-- ŁD: przeszkody na karabinkach/obejmach (nie na pasach) -->
-        <div class="check-item" id="week-ninja-karabinki" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki / obejmy na których wiszą przeszkody: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item" id="week-ninja-karabinki" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki / obejmy na których wiszą przeszkody: <span class="alert-tag">⚡ tech lok.</span></span></div>
         <div class="check-item">
           <div class="check-box" onclick="toggle(this)"></div>
           <span class="check-label expand-label" onclick="toggleExpand('arr-ninja-stan','sub-ninja-stan')">
@@ -1266,12 +1273,12 @@
           <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
         </div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Kolorowe lampy:</span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / konstrukcja: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Poziom gąbek w basenie: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item" id="week-ninja-wrapy"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wrapy: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki (mocowania): <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / konstrukcja: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Poziom gąbek w basenie: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item" id="week-ninja-wrapy"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Wrapy: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki (mocowania): <span class="alert-tag">⚡ tech lok.</span></span></div>
       </div>
       <div class="pz-zone-note" id="pz-note-week-ninja" style="display:none">
         <textarea placeholder="Opis / uwagi — Tor Ninja tygodniowy..."></textarea>
@@ -1283,13 +1290,13 @@
       <div id="week-tor-ocr-ld" style="display:none">
         <div class="section-title">Tor OCR — przegląd techniczny <small style="font-size:11px;color:#64748b">(tylko Łódź)</small></div>
         <div class="check-grid">
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatki: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / konstrukcja: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan przeszkód torowych: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Materace: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Siatki: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Karabinki: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / konstrukcja: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan przeszkód torowych: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Materace: <span class="alert-tag">⚡ tech lok.</span></span></div>
         </div>
       </div>
 
@@ -1297,13 +1304,13 @@
       <div id="week-parkour-section">
         <div class="section-title">Parkour <small style="font-size:11px;color:#64748b">(tylko Poznań)</small></div>
         <div class="check-grid">
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Panele: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Przeszkody drewniane: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Ściany: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Drabinki: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Listwy: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Rury: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Panele: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Przeszkody drewniane: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Ściany: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Drabinki: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Listwy: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Obejmy: <span class="alert-tag">⚡ tech lok.</span></span></div>
         </div>
         <textarea class="input-field" style="margin-top:8px;min-height:46px" placeholder="Opis / uwagi — Parkour..."></textarea>
         <div class="photo-upload-btn" style="margin-top:6px">📷 Dodaj zdjęcie</div>
@@ -1325,15 +1332,16 @@
         </div>
         <div class="section-title" style="margin-top:10px">Salka gimnastyczna — przegląd techniczny <small style="font-size:11px;color:#64748b">(tylko Częstochowa)</small></div>
         <div class="check-grid-1">
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprzęt dmuchany — stan (czy nie schodzi powietrze, przetarcia, czystość): <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Springfloor — stan: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Airtrack — czy napompowany: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Drabinki — stan: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Drążki — stan: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprzęt dmuchany — stan (czy nie schodzi powietrze, przetarcia, czystość): <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Springfloor — stan: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Airtrack — czy napompowany: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Drabinki — stan: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Drążki — stan: <span class="alert-tag">⚡ tech lok.</span></span></div>
         </div>
       </div>
 
       <!-- ───── PARK LINOWY ───── -->
+      <div id="week-park-section-wrap">
       <div class="section-title">Park linowy — uprzęże i lonże (tygodniowo)</div>
       <div class="check-grid-1">
 
@@ -1374,6 +1382,7 @@
         <div class="check-item" id="week-park-automaty"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Automat do ewakuacji z parku linowego: <span class="alert-tag">⚡ NATYCHMIAST + Roman</span></span></div>
       </div>
       <!-- PZ: opis i zdjęcie per dział -->
+      </div>  <!-- /week-park-section-wrap -->
       <div class="pz-zone-note" id="pz-note-week-park" style="display:none">
         <textarea placeholder="Opis / uwagi — Park linowy tygodniowa..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
@@ -1386,7 +1395,7 @@
       </div>
 
       <!-- ───── AUTOMATY PD tygodniowo ───── -->
-      <div id="week-automaty-pd-section">
+      <div id="week-automaty-pd-section" style="display:none">
         <div class="section-title">Automaty PD (wspinaczkowe)</div>
         <div class="check-grid-1">
           <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Test karabinka / taśmy (codziennie też — tutaj potwierdzenie tygodniowe): <span class="alert-tag">⚡ Roman</span></span></div>
@@ -1395,19 +1404,21 @@
       </div>
 
       <!-- ───── TRAMPOLINY SPORTOWE I SPRĘŻYNY ───── -->
+      <div id="week-tramp-sport-wrap">
       <div class="section-title" id="week-tramp-sport-title">Trampoliny sportowe — przegląd techniczny</div>
       <div class="check-grid-1">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan trampoliny (przetarcia, rozdarcia): <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny — stan, naprężenie, brakujące: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan trampoliny (przetarcia, rozdarcia): <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny — stan, naprężenie, brakujące: <span class="alert-tag">⚡ tech lok.</span></span></div>
         <!-- Spódniczki — ukryte dla PZ (AIR MAXX ich nie ma) -->
-        <div class="check-item" id="week-tramp-spodniczki"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Spódniczki — stan i mocowanie: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item" id="week-tramp-spodniczki"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Spódniczki — stan i mocowanie: <span class="alert-tag">⚡ tech lok.</span></span></div>
         <!-- Fiszbiny — ukryte dla PZ (AIR MAXX ich nie ma) -->
-        <div class="check-item" id="week-tramp-fiszbiny"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Fiszbiny — stan i kompletność: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Gumy — stan i naprężenie: <span class="alert-tag">⚡ ALERT</span></span></div>
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / rama — widoczne uszkodzenia: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item" id="week-tramp-fiszbiny"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Fiszbiny — stan i kompletność: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Gumy — stan i naprężenie: <span class="alert-tag">⚡ tech lok.</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stelaż / rama — widoczne uszkodzenia: <span class="alert-tag">⚡ tech lok.</span></span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Pady wokół trampoliny:</span></div>
       </div>
       <!-- PZ: opis i zdjęcie per dział -->
+      </div>  <!-- /week-tramp-sport-wrap -->
       <div class="pz-zone-note" id="pz-note-week-tramp-sport" style="display:none">
         <textarea placeholder="Opis / uwagi — Trampoliny sportowe..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
@@ -1417,14 +1428,14 @@
       <div id="week-tramp-zwykle-section" style="display:none">
         <div class="section-title">Trampoliny zwykłe — przegląd techniczny <small style="font-size:11px;color:#64748b">(tylko Poznań)</small></div>
         <div class="check-grid-1">
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trampolina (przetarcia, rozdarcia): <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny — stan, naprężenie, brakujące: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Fiszbiny — stan i kompletność: <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Gumy — stan i naprężenie: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Trampolina (przetarcia, rozdarcia): <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny — stan, naprężenie, brakujące: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Fiszbiny — stan i kompletność: <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Gumy — stan i naprężenie: <span class="alert-tag">⚡ tech lok.</span></span></div>
           <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Pady wokół trampoliny:</span></div>
           <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Spódniczki — stan i mocowanie:</span></div>
         </div>
-        <div class="pz-zone-note" id="pz-note-week-tramp-zwykle">
+        <div class="pz-zone-note" id="pz-note-week-tramp-zwykle" style="display:none">
           <textarea placeholder="Opis / uwagi — Trampoliny zwykłe..."></textarea>
           <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
         </div>
@@ -1440,7 +1451,7 @@
           <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyczyszczenie kółek:</span></div>
           <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Mycie myjącego odkurzacza:</span></div>
         </div>
-        <div class="pz-zone-note" id="pz-note-week-odkurz-myj">
+        <div class="pz-zone-note" id="pz-note-week-odkurz-myj" style="display:none">
           <textarea placeholder="Opis / uwagi — odkurzacz myjąco-odkurzający..."></textarea>
           <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
         </div>
@@ -1450,7 +1461,7 @@
           <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przedmuchanie kompresorem:</span></div>
           <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wyczyszczenie kółek:</span></div>
         </div>
-        <div class="pz-zone-note" id="pz-note-week-odkurz-suchy">
+        <div class="pz-zone-note" id="pz-note-week-odkurz-suchy" style="display:none">
           <textarea placeholder="Opis / uwagi — odkurzacz odkurzający..."></textarea>
           <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
         </div>
@@ -1479,25 +1490,28 @@
       <div id="week-springfloor-section" style="display:none">
         <div class="section-title">Springfloor — stan techniczny <small style="font-size:11px;color:#64748b">(tylko Warszawa)</small></div>
         <div class="check-grid-1">
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan springfloora (przetarcia, odkształcenia): <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny springfloora — brakujące / uszkodzone: <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan springfloora (przetarcia, odkształcenia): <span class="alert-tag">⚡ tech lok.</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprężyny springfloora — brakujące / uszkodzone: <span class="alert-tag">⚡ tech lok.</span></span></div>
         </div>
       </div>
 
       <!-- ───── URZĄDZENIA INTERAKTYWNE ───── -->
+      <div id="week-interactive-wrap">
       <div class="section-title">Urządzenia interaktywne — przegląd techniczny</div>
       <div class="check-grid-1">
-        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Jump — stan techniczny, kalibracja: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Jump — stan techniczny: <span class="alert-tag">⚡ lok. manager</span></span></div>
         <!-- Valo Climb — PZ + ŁD + WWA -->
-        <div class="check-item" id="week-valo-climb-inter" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Climb — stan techniczny, czyszczenie rzutnika: <span class="alert-tag">⚡ ALERT</span></span></div>
+        <div class="check-item" id="week-valo-climb-inter" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Climb — stan techniczny, czyszczenie rzutnika: <span class="alert-tag">⚡ lok. manager</span></span></div>
+        <div class="check-item" id="week-valo-climb-kalibracja" style="display:none"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Valo Climb — kalibracja: <span class="alert-tag">⚡ lok. manager</span></span></div>
         <!-- CZ: Jumplings + Foxball -->
         <div id="week-cz-interactive" style="display:none">
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Foxball — piłki (czy nie schodzi powietrze): <span class="alert-tag">⚡ ALERT</span></span></div>
-          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Jumplings — jumppady (czy nie schodzi powietrze): <span class="alert-tag">⚡ ALERT</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Foxball — piłki (czy nie schodzi powietrze): <span class="alert-tag">⚡ lok. manager</span></span></div>
+          <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Jumplings — jumppady (czy nie schodzi powietrze): <span class="alert-tag">⚡ lok. manager</span></span></div>
           <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzenie filtrów (Foxball + Jumplings):</span></div>
           <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Przedmuchanie sprężonym powietrzem:</span></div>
         </div>
       </div>
+      </div>  <!-- /week-interactive-wrap -->
       <div class="pz-zone-note" id="pz-note-week-interactive" style="display:none">
         <textarea placeholder="Opis / uwagi — Urządzenia interaktywne..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
@@ -1559,7 +1573,7 @@
           </div>
         </div>
         <!-- PZ EXTRA: rozszerzony sprzęt sportowy -->
-        <div id="week-inw-pz" style="display:none;display:flex;flex-direction:column;gap:8px">
+        <div id="week-inw-pz" style="display:flex;flex-direction:column;gap:8px">
           <!-- helper: wszystkie PZ-only items -->
         </div>
       </div>
@@ -1640,12 +1654,13 @@
      PAGE 5 — LEGENDA
 ═══════════════════════════════════════════════ -->
 <div class="page" id="p-legend">
-  <div class="page-title">Legenda dla IT (v1.4)</div>
+  <div class="page-title">Legenda dla IT (v1.5)</div>
   <div class="frame">
     <div class="card-mid legend">
-      <strong>Wzorzec UI dla IT — Stacja Grawitacja (v1.4)</strong><br>
+      <strong>Wzorzec UI dla IT — Stacja Grawitacja (v1.5)</strong><br>
       Dokument pokazuje dokładny wygląd i układ formularzy do wdrożenia w aplikacji.<br>
-      <strong>Zaktualizowano 2026-06-02</strong> — WWA + CZ + PZ batch: Tor Ninja (CZ), Euro Tramp (CZ), Salka do tygodniowej (CZ), SpringFloor (WWA), Quad/PRO/liny (WWA), noty opis+zdjęcie dla Poznania (Tor Ninja, Urządzenia interaktywne). <strong>Nowy system checkboxów:</strong> pozycje sprzątania = klasyczny checkbox; pozycje stanu technicznego (⚡) = przyciski TAK/NIE → OK/Uszkodzenie → opis+zdjęcie. Alerty wyświetlają się pierwsze w każdej sekcji.<br><br>
+      <strong>Zaktualizowano 2026-06-02 (v1.5)</strong> — PZ batch #2: Otwarcie (hide ninja/siatki/dywany, dodano sprawdzenie trampolin), Zamknięcie (mop-pz: Duża/Mała Wieża, Valo Climb/Jump, siatkówki, komunikacja), Brygadzista (fix stretch div, Q4 alert → lok. manager), Tygodniowa (usunięto Automaty PD globalnie, Valo Climb kalibracja nowy item, Valo Jump bez kalibracji, alerty tech lok./lok. manager per sekcja, kije/kamizelki globalne ukrycie).<br>
+      <strong>Poprzednia aktualizacja 2026-06-02 (v1.4)</strong> — WWA + CZ + PZ batch: Tor Ninja (CZ), Euro Tramp (CZ), Salka do tygodniowej (CZ), SpringFloor (WWA), Quad/PRO/liny (WWA), noty opis+zdjęcie dla Poznania (Tor Ninja, Urządzenia interaktywne). <strong>Nowy system checkboxów:</strong> pozycje sprzątania = klasyczny checkbox; pozycje stanu technicznego (⚡) = przyciski TAK/NIE → OK/Uszkodzenie → opis+zdjęcie. Alerty wyświetlają się pierwsze w każdej sekcji.<br><br>
 
       <strong>Dwa typy checkboxów:</strong><br>
       ☐ <strong>Sprzątanie</strong> — zwykłe pole, zaznacz gdy wykonane<br>
@@ -1959,8 +1974,10 @@ function switchCity(btn, city) {
    'open-tramp-open-section','valo-jump-open-section'].forEach(id => {
     document.getElementById(id).style.display = 'block';
   });
+  // cz-sub-tabs usunięte z otwarcia (salka przeniesiona do tygodniowej) — guard na null
+  const czSubFirst = document.querySelector('#cz-sub-tabs .sub-loc-tab');
   document.querySelectorAll('#cz-sub-tabs .sub-loc-tab').forEach(b => b.classList.remove('active'));
-  document.querySelector('#cz-sub-tabs .sub-loc-tab').classList.add('active');
+  if (czSubFirst) czSubFirst.classList.add('active');
   document.getElementById('pro-cz-park').style.display = 'block';
   document.getElementById('pro-cz-salka').style.display = 'none';
 
@@ -1973,7 +1990,7 @@ function switchCity(btn, city) {
   // NINJA — PZ nie sprawdza rano (sprząta się wieczorem)
   document.getElementById('ninja-dywany').style.display = city === 'Częstochowa' ? 'flex' : 'none';
   document.getElementById('ninja-podstawowe').style.display = city === 'Łódź' ? 'flex' : 'none';
-  document.getElementById('ninja-wwa-open').style.display = (city === 'Warszawa' || city === 'Częstochowa' || city === 'Poznań') ? 'flex' : 'none';
+  document.getElementById('ninja-wwa-open').style.display = (city === 'Warszawa' || city === 'Częstochowa') ? 'flex' : 'none';
   document.getElementById('ninja-schody').style.display = city === 'Łódź' ? 'flex' : 'none';
 
   // TOR PRZESZKÓD OTWARCIE — ukryty dla WWA; siatki ukryte dla CZ
@@ -1995,7 +2012,7 @@ function switchCity(btn, city) {
   document.getElementById('pod-other').style.display = (city === 'Częstochowa' || city === 'Warszawa') ? 'block' : 'none';
 
   // OPEN — pola per miasto
-  document.getElementById('open-wwa-tramp').style.display = city === 'Warszawa' ? 'flex' : 'none';
+  document.getElementById('open-wwa-tramp').style.display = (city === 'Warszawa' || city === 'Poznań') ? 'flex' : 'none';
   document.getElementById('open-wwa-odkurz-tramp').style.display = city === 'Warszawa' ? 'flex' : 'none';
   document.getElementById('open-ekran-zasad').style.display = (city === 'Częstochowa' || city === 'Poznań' || city === 'Łódź') ? 'none' : 'flex';
   // ŁD: Bawialnia otwarcie
@@ -2020,7 +2037,7 @@ function switchCity(btn, city) {
     torCheck1.querySelector('.check-label').innerHTML = 'Stan toru przeszkód — przegląd ogólny: <span class="alert-tag">⚡ ALERT</span>';
   }
   // CZ + ŁD: ukryj siatki wokół basenu z gąbkami
-  document.getElementById('ninja-siatki-open').style.display = (city === 'Częstochowa' || city === 'Łódź') ? 'none' : 'flex';
+  document.getElementById('ninja-siatki-open').style.display = 'none'; // brak siatek we wszystkich miastach
   // ŁD: ukryj siatki na torze
   document.getElementById('tor-siatki-open').style.display = (city === 'Częstochowa' || city === 'Łódź') ? 'none' : 'flex';
   // CZ: ukryj przetarcie ekranów ValoJump
@@ -2040,8 +2057,9 @@ function switchCity(btn, city) {
   document.getElementById('pro-cz').style.display = city === 'Częstochowa' ? 'block' : 'none';
   document.getElementById('pro-wwa').style.display = city === 'Warszawa' ? 'block' : 'none';
 
-  // CZ sub-tabs
-  document.getElementById('cz-sub-tabs').style.display = city === 'Częstochowa' ? 'flex' : 'none';
+  // CZ sub-tabs (usunięte z otwarcia — guard na null)
+  const czSubTabsEl = document.getElementById('cz-sub-tabs');
+  if (czSubTabsEl) czSubTabsEl.style.display = city === 'Częstochowa' ? 'flex' : 'none';
 
   // Valo Climb (Poz/Łódź/Wwa, nie Czewa)
   document.getElementById('valo-climb-section').style.display = city !== 'Częstochowa' ? 'block' : 'none';
@@ -2161,7 +2179,7 @@ function switchCityWeek(btn, city) {
   document.getElementById('week-park-ld-note').style.display = city === 'Łódź' ? 'block' : 'none';
 
   // AUTOMATY PD — brak sekcji w PZ
-  document.getElementById('week-automaty-pd-section').style.display = city === 'Poznań' ? 'none' : 'block';
+  // week-automaty-pd-section: usunięte globalnie (na prośbę PZ — nie przywracać)
 
   // PZ HAPPY CLIMB: pokaż strzałki expand
   ['arr-hc-uprzeze','arr-hc-kara','arr-hc-auto'].forEach(id => {
@@ -2206,6 +2224,8 @@ function switchCityWeek(btn, city) {
   // VALO CLIMB w urządzeniach interaktywnych (PZ + ŁD + WWA)
   document.getElementById('week-valo-climb-inter').style.display =
     (city === 'Poznań' || city === 'Łódź' || city === 'Warszawa') ? 'flex' : 'none';
+  document.getElementById('week-valo-climb-kalibracja').style.display =
+    (city === 'Poznań' || city === 'Łódź' || city === 'Warszawa') ? 'flex' : 'none';
 
   // PZ INWENTARYZACJA: rozszerzona lista
   const inwPzFull = document.getElementById('week-inw-pz-full');
@@ -2224,15 +2244,18 @@ function switchCityWeek(btn, city) {
   // WWA: SpringFloor tygodniowo
   document.getElementById('week-springfloor-section').style.display = city === 'Warszawa' ? 'block' : 'none';
 
-  // WWA + CZ: Air Maxx spódniczki / fiszbiny / gumy — WWA nie ma spódniczek i fiszbinów (Euro Tramp)
+  // Trampoliny: spódniczki — nie ma w PZ i WWA (AIR MAXX nie ma spódniczek)
   document.getElementById('week-tramp-spodniczki').style.display = (city === 'Poznań' || city === 'Warszawa') ? 'none' : 'flex';
-  document.getElementById('week-tramp-fiszbiny').style.display = (city === 'Poznań' || city === 'Warszawa') ? 'none' : 'flex';
+  // Fiszbiny — nie ma w PZ, WWA (AIR MAXX) i CZ (Euro Tramp — usunięte na prośbę Mateusza)
+  document.getElementById('week-tramp-fiszbiny').style.display = (city === 'Poznań' || city === 'Warszawa' || city === 'Częstochowa') ? 'none' : 'flex';
 
-  // CZ: tytuł trampoliny → Euro Tramp
+  // Trampoliny: tytuł per miasto
   const trampTitle = document.getElementById('week-tramp-sport-title');
   if (trampTitle) trampTitle.textContent = city === 'Częstochowa'
     ? 'Trampoliny sportowe (Euro Tramp) — przegląd techniczny'
-    : 'Trampoliny sportowe (AIR MAXX) — przegląd techniczny';
+    : city === 'Łódź'
+      ? 'Trampoliny sportowe — przegląd techniczny'
+      : 'Trampoliny sportowe (AIR MAXX) — przegląd techniczny';
 
   // CZ: Tor Ninja sekcja szczegółowa — ukryta (CZ ma już wyżej)
   document.getElementById('week-tor-ninja-section').style.display = city === 'Częstochowa' ? 'none' : 'block';
@@ -2244,7 +2267,7 @@ function switchCityWeek(btn, city) {
     : 'Poduszki / Airbag — przegląd techniczny';
 
   // CZ + WWA + ŁD: kije/rakietki — brak
-  document.getElementById('week-inw-kije').style.display = (city === 'Częstochowa' || city === 'Warszawa' || city === 'Łódź') ? 'none' : 'grid';
+  document.getElementById('week-inw-kije').style.display = 'none'; // usunięto dla wszystkich miast (PZ feedback)
   // kamizelki/akcesoria — usunięte globalnie
   document.getElementById('week-inw-kamizelki').style.display = 'none';
   // ŁD: Piłki inne — brak
@@ -2265,9 +2288,32 @@ function switchCityWeek(btn, city) {
   if (parkNote) parkNote.style.display = city === 'Poznań' ? 'block' : 'none';
 
   // PZ TYGODNIOWA: opis i zdjęcie per dział
-  ['pz-note-week-hc','pz-note-week-pod','pz-note-week-ninja','pz-note-week-interactive'].forEach(id => {
+  ['pz-note-week-hc','pz-note-week-pod','pz-note-week-ninja','pz-note-week-interactive',
+   'pz-note-week-tramp-zwykle','pz-note-week-odkurz-myj','pz-note-week-odkurz-suchy'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = city === 'Poznań' ? 'block' : 'none';
+  });
+
+  // ALERT ROUTING PER MIASTO
+  const alertRouting = {
+    'week-hc-section-wrap':      { pz: 'lok. manager + Włodek',      def: 'NATYCHMIAST + Roman' },
+    'week-pod-section-wrap':     { pz: 'Włodek',                      def: 'tech lok.' },
+    'week-air-section-wrap':     { pz: 'Włodek',                      def: 'tech lok.' },
+    'week-tor-section':          { pz: 'Włodek',                      def: 'tech lok.' },
+    'week-tor-ninja-section':    { pz: 'Włodek',                      def: 'tech lok.' },
+    'week-parkour-section':      { pz: 'Włodek',                      def: 'tech lok.' },
+    'week-park-section-wrap':    { pz: 'Włodek + Roman + lok. Manager', def: 'NATYCHMIAST + Roman' },
+    'week-tramp-sport-wrap':     { pz: 'Włodek',                      def: 'tech lok.' },
+    'week-tramp-zwykle-section': { pz: 'Włodek',                      def: 'tech lok.' },
+    'week-interactive-wrap':     { pz: 'lok. Manager',                def: 'lok. manager' },
+  };
+  Object.entries(alertRouting).forEach(([id, texts]) => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const alertText = city === 'Poznań' ? texts.pz : texts.def;
+    sec.querySelectorAll('.alert-tag').forEach(tag => {
+      tag.textContent = '⚡ ' + alertText;
+    });
   });
 }
 </script>
