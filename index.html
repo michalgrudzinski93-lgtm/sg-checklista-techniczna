@@ -70,6 +70,11 @@
   /* iOS: zapobiega auto-zoom przy focus na inputach */
   input,select,textarea{font-size:16px!important}
 
+  /* ── FIELD ERROR BUBBLE ── */
+  .field-error{background:#450a0a;border:1px solid #991b1b;border-radius:8px;padding:7px 12px;font-size:12px;color:#fca5a5;margin-top:5px;position:relative;animation:fadeIn .2s ease}
+  .field-error::before{content:'';position:absolute;top:-6px;left:14px;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #991b1b}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
   /* ── ALERT TAG ── */
   .alert-tag{font-size:10px;color:#f87171;background:#450a0a;border:1px solid #991b1b;padding:1px 6px;border-radius:4px;margin-left:6px;font-weight:700;white-space:nowrap}
 
@@ -1916,13 +1921,49 @@ function wybierz(btn, group, val) {
   }
 }
 
+function showFieldError(fieldId, msg) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  // usuń poprzedni błąd
+  const prev = el.parentNode.querySelector('.field-error[data-for="' + fieldId + '"]');
+  if (prev) prev.remove();
+  // dodaj chmurkę
+  const bubble = document.createElement('div');
+  bubble.className = 'field-error';
+  bubble.dataset.for = fieldId;
+  bubble.textContent = msg;
+  el.parentNode.insertBefore(bubble, el.nextSibling);
+  // auto-usuń gdy użytkownik zacznie edytować
+  const clear = () => { bubble.remove(); el.removeEventListener('input', clear); el.removeEventListener('change', clear); };
+  el.addEventListener('input', clear);
+  el.addEventListener('change', clear);
+}
+
+function clearFieldError(fieldId) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  const prev = el.parentNode.querySelector('.field-error[data-for="' + fieldId + '"]');
+  if (prev) prev.remove();
+}
+
 function wyslijProtokol() {
   const miasto = document.getElementById('wyp-miasto').value;
   const osoba = document.getElementById('wyp-osoba').value.trim();
   const opis = document.getElementById('wyp-opis').value.trim();
   const autor = document.getElementById('wyp-autor').value.trim();
-  if (!miasto || !osoba || !opis || !autor) {
-    alert('Uzupełnij obowiązkowe pola: Lokalizacja, Poszkodowany, Opis zdarzenia, Osoba wypełniająca.');
+
+  let firstError = null;
+  if (!miasto) { showFieldError('wyp-miasto', '⚠ Wybierz lokalizację'); if (!firstError) firstError = 'wyp-miasto'; }
+  else clearFieldError('wyp-miasto');
+  if (!osoba) { showFieldError('wyp-osoba', '⚠ Podaj imię i nazwisko poszkodowanego'); if (!firstError) firstError = 'wyp-osoba'; }
+  else clearFieldError('wyp-osoba');
+  if (!opis) { showFieldError('wyp-opis', '⚠ Opisz co się wydarzyło'); if (!firstError) firstError = 'wyp-opis'; }
+  else clearFieldError('wyp-opis');
+  if (!autor) { showFieldError('wyp-autor', '⚠ Podaj imię osoby wypełniającej protokół'); if (!firstError) firstError = 'wyp-autor'; }
+  else clearFieldError('wyp-autor');
+
+  if (firstError) {
+    document.getElementById(firstError).scrollIntoView({behavior:'smooth', block:'center'});
     return;
   }
   const routing = WYP_ROUTING[miasto] ? WYP_ROUTING[miasto].osoby : 'manager lokalizacji + Michał G.';
