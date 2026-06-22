@@ -56,7 +56,7 @@
   .check-item.tc-done{flex-direction:column;align-items:flex-start;gap:6px;padding:8px 0 10px;border-bottom:1px solid #1e2d42}
   .tc-label{font-size:14px;color:#e2e8f0;line-height:1.4;width:100%}
   .tc-btns,.tc-result{display:flex;gap:6px;flex-wrap:wrap}
-  .tc-btn{padding:10px 20px;border-radius:7px;border:1.5px solid #3d5a7a;background:#0d1b2a;color:#94a3b8;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;min-height:44px}
+  .tc-btn{padding:7px 16px;border-radius:7px;border:1.5px solid #3d5a7a;background:#0d1b2a;color:#94a3b8;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;min-height:36px}
   .tc-btn:hover{background:#1e2d42;color:#e2e8f0}
   .tc-active-tak,.tc-active-ok{background:#2d6a4f!important;border-color:#4ade80!important;color:#4ade80!important}
   .tc-active-nie,.tc-active-dmg{background:#7f1d1d!important;border-color:#ef4444!important;color:#fca5a5!important}
@@ -198,12 +198,11 @@
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Koszykówka:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wsady do kosza:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprzątanie śmieci:</span></div>
-        <div class="check-item" id="sprz-odkurz-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label" id="sprz-odkurz-label">Odkurzacz auto.:</span></div>
-        <!-- WWA only: odkurzacz auto — szczegółowe checkboxy -->
-        <div class="check-grid-1" id="odkurz-wwa-extra" style="display:none">
-          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Opróżnienie zbiornika:</span></div>
-          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Dojechał do stacji ładowania:</span></div>
-          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wykonał całe zadanie:</span></div>
+        <!-- Odkurzacz auto — szczegółowe checkboxy dla wszystkich miast -->
+        <div class="check-grid-1" id="odkurz-wwa-extra">
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — opróżnienie zbiornika:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — dojechał do stacji ładowania:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — wykonał całe zadanie:</span></div>
         </div>
         <div class="check-item" id="tv-open"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Włączenie TV:</span></div>
       </div>
@@ -1677,7 +1676,10 @@
       <!-- DATA I LOKALIZACJA -->
       <div class="section-title">Podstawowe informacje</div>
       <label class="input-label">Data i godzina zdarzenia</label>
-      <input type="datetime-local" id="wyp-datetime" class="input-field" style="color:#e2e8f0">
+      <div style="display:flex;gap:8px">
+        <input type="date" id="wyp-date" class="input-field" style="color:#e2e8f0;flex:1.4">
+        <input type="time" id="wyp-time" class="input-field" style="color:#e2e8f0;flex:1">
+      </div>
       <label class="input-label">Lokalizacja</label>
       <select id="wyp-miasto" class="input-field" style="color:#e2e8f0" onchange="updateAlertRouting()">
         <option value="">— wybierz miasto —</option>
@@ -1933,7 +1935,7 @@ function wyslijProtokol() {
 
 function resetProtokol() {
   // Resetuje formularz i chowa ekran potwierdzenia
-  ['wyp-datetime','wyp-strefa','wyp-osoba','wyp-wiek','wyp-opiekun','wyp-opis','wyp-obrazenia','wyp-dzialania','wyp-swiadkowie','wyp-autor','wyp-stanowisko'].forEach(id => {
+  ['wyp-date','wyp-time','wyp-strefa','wyp-osoba','wyp-wiek','wyp-opiekun','wyp-opis','wyp-obrazenia','wyp-dzialania','wyp-swiadkowie','wyp-autor','wyp-stanowisko'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -2216,9 +2218,6 @@ function switchCity(btn, city) {
   document.getElementById('open-ekran-zasad').style.display = (city === 'Częstochowa' || city === 'Poznań' || city === 'Łódź') ? 'none' : 'flex';
   // ŁD: Bawialnia otwarcie
   document.getElementById('bawialnia-open-ld').style.display = city === 'Łódź' ? 'block' : 'none';
-  // ŁD: odkurzacz label
-  const odkurzLabel = document.getElementById('sprz-odkurz-label');
-  if (odkurzLabel) odkurzLabel.textContent = city === 'Łódź' ? 'Opróżnić odkurzacze:' : 'Odkurzacz auto.:';
   document.getElementById('open-ld-pilki').style.display = city === 'Łódź' ? 'flex' : 'none';
   document.getElementById('open-ld-odkurz').style.display = city === 'Łódź' ? 'flex' : 'none';
 
@@ -2246,8 +2245,7 @@ function switchCity(btn, city) {
 
   // WWA: Quad + odkurzanie PRO (sprzątanie ogólne)
   document.getElementById('sprz-wwa').style.display = city === 'Warszawa' ? 'flex' : 'none';
-  // WWA: odkurzacz auto — szczegółowe checkboxy
-  document.getElementById('odkurz-wwa-extra').style.display = city === 'Warszawa' ? 'flex' : 'none';
+  // Odkurzacz auto — szczegółowe checkboxy dla wszystkich miast (zawsze widoczne)
   // WWA: liny Happy Climb po nocy
   document.getElementById('happy-wwa-liny').style.display = city === 'Warszawa' ? 'flex' : 'none';
 
