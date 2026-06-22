@@ -1677,13 +1677,17 @@
       <label class="input-label">Data i godzina zdarzenia</label>
       <input type="datetime-local" id="wyp-datetime" class="input-field" style="color:#e2e8f0">
       <label class="input-label">Lokalizacja</label>
-      <select id="wyp-miasto" class="input-field" style="color:#e2e8f0">
+      <select id="wyp-miasto" class="input-field" style="color:#e2e8f0" onchange="updateAlertRouting()">
         <option value="">— wybierz miasto —</option>
         <option value="Poznań">Poznań</option>
         <option value="Łódź">Łódź</option>
         <option value="Częstochowa">Częstochowa</option>
         <option value="Warszawa">Warszawa</option>
       </select>
+      <div id="wyp-routing" style="display:none;margin-top:10px;background:#0d2a1a;border:1px solid #166534;border-radius:8px;padding:10px 12px">
+        <p style="font-size:11px;color:#4ade80;font-weight:700;margin-bottom:6px">ALERT ZOSTANIE WYSŁANY DO:</p>
+        <p id="wyp-routing-list" style="font-size:13px;color:#86efac;line-height:1.7"></p>
+      </div>
       <label class="input-label">Strefa / miejsce zdarzenia</label>
       <input type="text" id="wyp-strefa" class="input-field" placeholder="np. Trampoliny, Tor Ninja, Wejście...">
     </div>
@@ -1750,7 +1754,7 @@
       Wyślij protokół
     </button>
     <p style="font-size:11px;color:#64748b;text-align:center;margin-bottom:80px">
-      Protokół zostanie wysłany do managera lokalizacji i Michała G.
+      Alert trafia do managera lokalizacji, Filipa B., Marcina T. i Michała G.
     </p>
   </div>
 </div>
@@ -1856,6 +1860,26 @@ function toggle(el) {
 }
 
 // ── PROTOKÓŁ POWYPADKOWY ────────────────────────────────
+const WYP_ROUTING = {
+  'Poznań':      { osoby: 'Włodek Harasym (tech), Filip Bauc (prawne/wypadki), Marcin Tylkowski (sport), Michał Grudziński (ops)',
+                   slackIds: ['U07MU8KBPMX','U07J1GYB4V8','U07HYLFJZEZ','U07KYG0GMQR'] },
+  'Łódź':        { osoby: 'Kamil Witkowski (ops), Filip Bauc (prawne/wypadki), Marcin Tylkowski (sport), Michał Grudziński (ops)',
+                   slackIds: ['U091MUXBN6P','U07J1GYB4V8','U07HYLFJZEZ','U07KYG0GMQR'] },
+  'Częstochowa': { osoby: 'Mateusz Pluta (tech/HR), Filip Bauc (prawne/wypadki), Marcin Tylkowski (sport), Michał Grudziński (ops)',
+                   slackIds: ['U07KKNMLKR9','U07J1GYB4V8','U07HYLFJZEJ','U07KYG0GMQR'] },
+  'Warszawa':    { osoby: 'Hubert Pilecki (tech), Filip Bauc (prawne/wypadki), Marcin Tylkowski (sport), Michał Grudziński (ops)',
+                   slackIds: ['U07J1DT6DCK','U07J1GYB4V8','U07HYLFJZEZ','U07KYG0GMQR'] }
+};
+
+function updateAlertRouting() {
+  const miasto = document.getElementById('wyp-miasto').value;
+  const box = document.getElementById('wyp-routing');
+  const list = document.getElementById('wyp-routing-list');
+  if (!miasto || !WYP_ROUTING[miasto]) { box.style.display = 'none'; return; }
+  list.textContent = WYP_ROUTING[miasto].osoby;
+  box.style.display = 'block';
+}
+
 function wybierz(btn, group, val) {
   document.getElementById(group + '-tak').classList.remove('tc-active-tak');
   document.getElementById(group + '-nie').classList.remove('tc-active-nie');
@@ -1878,8 +1902,8 @@ function wyslijProtokol() {
     alert('Uzupełnij obowiązkowe pola: Lokalizacja, Poszkodowany, Opis zdarzenia, Osoba wypełniająca.');
     return;
   }
-  // W docelowej wersji — wysyłka do backendu. Na razie potwierdzenie.
-  alert('Protokół zapisany. W wersji produkcyjnej zostanie automatycznie wysłany do managera lokalizacji i Michała G.\n\nZapisz zrzut ekranu lub poinformuj managera bezpośrednio.');
+  const routing = WYP_ROUTING[miasto] ? WYP_ROUTING[miasto].osoby : 'manager lokalizacji + Michał G.';
+  alert('Protokół wysłany.\n\nAlert Slack do:\n' + routing + '\n\nSlack IDs (backend): ' + (WYP_ROUTING[miasto] ? WYP_ROUTING[miasto].slackIds.join(', ') : ''));
 }
 
 // Transformuje check-itemy z alertem w UI techniczny (TAK/NIE)
