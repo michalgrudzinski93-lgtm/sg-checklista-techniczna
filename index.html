@@ -1931,6 +1931,8 @@ function showFieldError(fieldId, msg) {
   bubble.className = 'field-error';
   bubble.dataset.for = fieldId;
   bubble.textContent = msg;
+  bubble.style.opacity = '1';
+  bubble.style.animation = 'none';
   el.parentNode.insertBefore(bubble, el.nextSibling);
   // auto-usuń gdy użytkownik zacznie edytować
   const clear = () => { bubble.remove(); el.removeEventListener('input', clear); el.removeEventListener('change', clear); };
