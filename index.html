@@ -155,6 +155,7 @@
   <button class="nav-btn" onclick="show('p-close')">🌙 Zamknięcie</button>
   <button class="nav-btn" onclick="show('p-brygad')">📋 Brygadzista</button>
   <button class="nav-btn" onclick="show('p-week')">📅 Tygodniowa</button>
+  <button class="nav-btn" onclick="show('p-wypadek')">🚨 Wypadek</button>
   <button class="nav-btn" onclick="show('p-legend')">ℹ️ Legenda</button>
 </div>
 
@@ -1660,6 +1661,100 @@
 <!-- ═══════════════════════════════════════════════
      PAGE 5 — LEGENDA
 ═══════════════════════════════════════════════ -->
+<!-- ══════════════════ PROTOKÓŁ POWYPADKOWY ══════════════════ -->
+<div class="page" id="p-wypadek">
+  <div class="frame">
+    <div class="app-header">
+      <span class="app-title">🚨 Protokół powypadkowy</span>
+    </div>
+    <div class="card">
+      <p style="font-size:12px;color:#fca5a5;background:#450a0a;border:1px solid #991b1b;border-radius:8px;padding:10px 12px;margin-bottom:14px;line-height:1.6">
+        Wypełnij TYLKO gdy wypadek wymagał interwencji medycznej lub wygląda poważnie. Drobne zdarzenia wpisuj w Brygadyście.
+      </p>
+
+      <!-- DATA I LOKALIZACJA -->
+      <div class="section-title">Podstawowe informacje</div>
+      <label class="input-label">Data i godzina zdarzenia</label>
+      <input type="datetime-local" id="wyp-datetime" class="input-field" style="color:#e2e8f0">
+      <label class="input-label">Lokalizacja</label>
+      <select id="wyp-miasto" class="input-field" style="color:#e2e8f0">
+        <option value="">— wybierz miasto —</option>
+        <option value="Poznań">Poznań</option>
+        <option value="Łódź">Łódź</option>
+        <option value="Częstochowa">Częstochowa</option>
+        <option value="Warszawa">Warszawa</option>
+      </select>
+      <label class="input-label">Strefa / miejsce zdarzenia</label>
+      <input type="text" id="wyp-strefa" class="input-field" placeholder="np. Trampoliny, Tor Ninja, Wejście...">
+    </div>
+
+    <div class="card-mid">
+      <!-- POSZKODOWANY -->
+      <div class="section-title">Poszkodowany</div>
+      <label class="input-label">Imię i nazwisko poszkodowanego</label>
+      <input type="text" id="wyp-osoba" class="input-field" placeholder="Imię Nazwisko">
+      <label class="input-label">Wiek poszkodowanego</label>
+      <input type="number" id="wyp-wiek" class="input-field" placeholder="np. 12" style="width:120px">
+      <label class="input-label">Czy poszkodowany był pełnoletni?</label>
+      <div class="tc-btns" style="margin-top:6px">
+        <button class="tc-btn" onclick="wybierz(this,'wyp-pelnoletni','tak')" id="wyp-pelnoletni-tak">TAK</button>
+        <button class="tc-btn" onclick="wybierz(this,'wyp-pelnoletni','nie')" id="wyp-pelnoletni-nie">NIE</button>
+      </div>
+      <label class="input-label" id="wyp-opiekun-label" style="display:none">Imię i nazwisko opiekuna (jeśli nieletni)</label>
+      <input type="text" id="wyp-opiekun" class="input-field" placeholder="Imię Nazwisko opiekuna" style="display:none">
+    </div>
+
+    <div class="card-mid">
+      <!-- OPIS ZDARZENIA -->
+      <div class="section-title">Opis zdarzenia</div>
+      <label class="input-label">Co się wydarzyło? (opisz dokładnie)</label>
+      <textarea id="wyp-opis" class="detail-input" style="min-height:110px" placeholder="Opisz przebieg zdarzenia — co robił poszkodowany, jak doszło do wypadku..."></textarea>
+      <label class="input-label">Rodzaj obrażeń / dolegliwości</label>
+      <textarea id="wyp-obrazenia" class="detail-input" placeholder="np. ból kolana, skręcenie kostki, rana głowy..."></textarea>
+    </div>
+
+    <div class="card-mid">
+      <!-- INTERWENCJA -->
+      <div class="section-title">Interwencja medyczna</div>
+      <label class="input-label">Czy wzywano pogotowie (112 / 999)?</label>
+      <div class="tc-btns" style="margin-top:6px">
+        <button class="tc-btn" onclick="wybierz(this,'wyp-pogotowie','tak')" id="wyp-pogotowie-tak">TAK</button>
+        <button class="tc-btn" onclick="wybierz(this,'wyp-pogotowie','nie')" id="wyp-pogotowie-nie">NIE</button>
+      </div>
+      <label class="input-label">Czy udzielono pierwszej pomocy na miejscu?</label>
+      <div class="tc-btns" style="margin-top:6px">
+        <button class="tc-btn" onclick="wybierz(this,'wyp-pp','tak')" id="wyp-pp-tak">TAK</button>
+        <button class="tc-btn" onclick="wybierz(this,'wyp-pp','nie')" id="wyp-pp-nie">NIE</button>
+      </div>
+      <label class="input-label">Działania podjęte przez personel</label>
+      <textarea id="wyp-dzialania" class="detail-input" placeholder="np. wezwano pogotowie, udzielono pierwszej pomocy, zamknięto strefę..."></textarea>
+    </div>
+
+    <div class="card-mid">
+      <!-- ŚWIADKOWIE -->
+      <div class="section-title">Świadkowie</div>
+      <label class="input-label">Imiona świadków zdarzenia (pracownicy / klienci)</label>
+      <textarea id="wyp-swiadkowie" class="detail-input" placeholder="np. Jan Kowalski (pracownik), nieznany klient przy torze..."></textarea>
+    </div>
+
+    <div class="card-mid">
+      <!-- ZGŁASZAJĄCY -->
+      <div class="section-title">Osoba wypełniająca protokół</div>
+      <label class="input-label">Imię i nazwisko</label>
+      <input type="text" id="wyp-autor" class="input-field" placeholder="Imię Nazwisko">
+      <label class="input-label">Stanowisko</label>
+      <input type="text" id="wyp-stanowisko" class="input-field" placeholder="np. Brygadzista, Manager zmiany...">
+    </div>
+
+    <button class="btn-submit" style="width:100%;margin-bottom:8px;border-radius:12px;padding:16px;font-size:16px" onclick="wyslijProtokol()">
+      Wyślij protokół
+    </button>
+    <p style="font-size:11px;color:#64748b;text-align:center;margin-bottom:80px">
+      Protokół zostanie wysłany do managera lokalizacji i Michała G.
+    </p>
+  </div>
+</div>
+
 <div class="page" id="p-legend">
   <div class="page-title">Legenda dla IT (v1.5)</div>
   <div class="frame">
@@ -1751,13 +1846,40 @@ function show(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  const map = {'p-open':0,'p-close':1,'p-brygad':2,'p-week':3,'p-legend':4};
+  const map = {'p-open':0,'p-close':1,'p-brygad':2,'p-week':3,'p-wypadek':4,'p-legend':5};
   document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
   window.scrollTo(0,0);
 }
 
 function toggle(el) {
   el.classList.toggle('checked');
+}
+
+// ── PROTOKÓŁ POWYPADKOWY ────────────────────────────────
+function wybierz(btn, group, val) {
+  document.getElementById(group + '-tak').classList.remove('tc-active-tak');
+  document.getElementById(group + '-nie').classList.remove('tc-active-nie');
+  if (val === 'tak') btn.classList.add('tc-active-tak');
+  else btn.classList.add('tc-active-nie');
+  // pokaż/ukryj pole opiekuna
+  if (group === 'wyp-pelnoletni') {
+    const show = val === 'nie';
+    document.getElementById('wyp-opiekun-label').style.display = show ? 'block' : 'none';
+    document.getElementById('wyp-opiekun').style.display = show ? 'block' : 'none';
+  }
+}
+
+function wyslijProtokol() {
+  const miasto = document.getElementById('wyp-miasto').value;
+  const osoba = document.getElementById('wyp-osoba').value.trim();
+  const opis = document.getElementById('wyp-opis').value.trim();
+  const autor = document.getElementById('wyp-autor').value.trim();
+  if (!miasto || !osoba || !opis || !autor) {
+    alert('Uzupełnij obowiązkowe pola: Lokalizacja, Poszkodowany, Opis zdarzenia, Osoba wypełniająca.');
+    return;
+  }
+  // W docelowej wersji — wysyłka do backendu. Na razie potwierdzenie.
+  alert('Protokół zapisany. W wersji produkcyjnej zostanie automatycznie wysłany do managera lokalizacji i Michała G.\n\nZapisz zrzut ekranu lub poinformuj managera bezpośrednio.');
 }
 
 // Transformuje check-itemy z alertem w UI techniczny (TAK/NIE)
