@@ -2211,14 +2211,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ── PHOTO UPLOAD ──────────────────────────────────────────
 function initPhotoUploads() {
-  // Zbierz wszystkie przyciski: .photo-upload-btn + inline divy z "Dodaj zdjęcie"
   const btns = [
     ...document.querySelectorAll('.photo-upload-btn'),
     ...[...document.querySelectorAll('div[style*="dashed"]')].filter(d => d.textContent.includes('Dodaj zdjęcie'))
   ];
 
-  btns.forEach((btn, i) => {
-    if (btn.dataset.photoInit) return; // nie inicjalizuj dwa razy
+  btns.forEach((btn) => {
+    if (btn.dataset.photoInit) return;
     btn.dataset.photoInit = '1';
     btn.style.cursor = 'pointer';
 
@@ -2229,37 +2228,73 @@ function initPhotoUploads() {
     input.style.display = 'none';
     btn.parentNode.insertBefore(input, btn.nextSibling);
 
+    // Trzymamy pliki w tablicy żeby móc usuwać pojedyncze
+    let files = [];
+
     btn.addEventListener('click', () => input.click());
 
     input.addEventListener('change', () => {
-      // Usuń poprzednie miniatury
-      const old = input.nextElementSibling;
-      if (old && old.classList.contains('photo-thumbs')) old.remove();
+      // Dodaj nowe pliki do tablicy (nie zastępuj — dołącz)
+      [...input.files].forEach(f => files.push(f));
+      renderThumbs();
+    });
 
-      if (!input.files.length) return;
+    function renderThumbs() {
+      // Usuń stary kontener miniaturek
+      const old = btn.parentNode.querySelector('.photo-thumbs');
+      if (old) old.remove();
+
+      if (!files.length) {
+        btn.textContent = '📷 Dodaj zdjęcie';
+        return;
+      }
 
       const thumbs = document.createElement('div');
       thumbs.className = 'photo-thumbs';
-      thumbs.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-top:8px';
+      thumbs.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-top:8px';
 
-      [...input.files].forEach(file => {
+      files.forEach((file, idx) => {
         const reader = new FileReader();
         reader.onload = e => {
           const wrap = document.createElement('div');
-          wrap.style.cssText = 'position:relative';
+          wrap.style.cssText = 'position:relative;display:inline-block';
+
           const img = document.createElement('img');
           img.src = e.target.result;
           img.style.cssText = 'width:70px;height:70px;object-fit:cover;border-radius:8px;border:2px solid #2d4a6a;display:block';
+
+          const xBtn = document.createElement('button');
+          xBtn.textContent = '×';
+          xBtn.style.cssText = 'position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:#ef4444;border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;opacity:0;transition:opacity .15s';
+          xBtn.addEventListener('mouseenter', () => xBtn.style.opacity = '1');
+          xBtn.addEventListener('mouseleave', () => xBtn.style.opacity = '0');
+          // na mobile: zawsze widoczny (dotyk nie ma hover)
+          xBtn.style.opacity = window.matchMedia('(hover:none)').matches ? '1' : '0';
+          wrap.addEventListener('mouseenter', () => xBtn.style.opacity = '1');
+          wrap.addEventListener('mouseleave', () => xBtn.style.opacity = '0');
+
+          xBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            files.splice(idx, 1);
+            // Przebuduj FileList w input przez DataTransfer
+            const dt = new DataTransfer();
+            files.forEach(f => dt.items.add(f));
+            input.files = dt.files;
+            renderThumbs();
+          });
+
           wrap.appendChild(img);
+          wrap.appendChild(xBtn);
           thumbs.appendChild(wrap);
         };
         reader.readAsDataURL(file);
       });
 
+      // Wstaw za inputem
       input.parentNode.insertBefore(thumbs, input.nextSibling);
-      const count = input.files.length;
-      btn.textContent = '📷 ' + count + (count === 1 ? ' zdjęcie' : ' zdjęcia') + ' — zmień';
-    });
+      const count = files.length;
+      btn.textContent = '📷 ' + count + (count === 1 ? ' zdjęcie' : ' zdjęcia') + ' — dodaj więcej';
+    }
   });
 }
 
