@@ -2161,11 +2161,66 @@ function toggleQ(checkbox, detailId) {
 // ── INIT: ustaw widoczność dla domyślnego miasta (Poznań) na starcie ──
 document.addEventListener('DOMContentLoaded', function() {
   initTechChecks(); // transformuj alert-itemy w UI techniczny (TAK/NIE)
+  initPhotoUploads(); // podłącz działające uploadowanie zdjęć
   const pzBtn = document.querySelector('#p-open .city-tab');
   if (pzBtn) switchCity(pzBtn, 'Poznań');
   const pzWeekBtn = document.querySelector('#p-week .city-tab');
   if (pzWeekBtn) switchCityWeek(pzWeekBtn, 'Poznań');
 });
+
+// ── PHOTO UPLOAD ──────────────────────────────────────────
+function initPhotoUploads() {
+  // Zbierz wszystkie przyciski: .photo-upload-btn + inline divy z "Dodaj zdjęcie"
+  const btns = [
+    ...document.querySelectorAll('.photo-upload-btn'),
+    ...[...document.querySelectorAll('div[style*="dashed"]')].filter(d => d.textContent.includes('Dodaj zdjęcie'))
+  ];
+
+  btns.forEach((btn, i) => {
+    if (btn.dataset.photoInit) return; // nie inicjalizuj dwa razy
+    btn.dataset.photoInit = '1';
+    btn.style.cursor = 'pointer';
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = true;
+    input.style.display = 'none';
+    btn.parentNode.insertBefore(input, btn.nextSibling);
+
+    btn.addEventListener('click', () => input.click());
+
+    input.addEventListener('change', () => {
+      // Usuń poprzednie miniatury
+      const old = input.nextElementSibling;
+      if (old && old.classList.contains('photo-thumbs')) old.remove();
+
+      if (!input.files.length) return;
+
+      const thumbs = document.createElement('div');
+      thumbs.className = 'photo-thumbs';
+      thumbs.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-top:8px';
+
+      [...input.files].forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const wrap = document.createElement('div');
+          wrap.style.cssText = 'position:relative';
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.cssText = 'width:70px;height:70px;object-fit:cover;border-radius:8px;border:2px solid #2d4a6a;display:block';
+          wrap.appendChild(img);
+          thumbs.appendChild(wrap);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      input.parentNode.insertBefore(thumbs, input.nextSibling);
+      const count = input.files.length;
+      btn.textContent = '📷 ' + count + (count === 1 ? ' zdjęcie' : ' zdjęcia') + ' — zmień';
+    });
+  });
+}
 
 // Synchroniczne pokazywanie/ukrywanie sekcji per miasto na zakładce OTWARCIE
 function switchCity(btn, city) {
