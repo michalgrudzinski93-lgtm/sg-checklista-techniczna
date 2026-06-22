@@ -196,6 +196,12 @@
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wsady do kosza:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprzątanie śmieci:</span></div>
         <div class="check-item" id="sprz-odkurz-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label" id="sprz-odkurz-label">Odkurzacz auto.:</span></div>
+        <!-- WWA only: odkurzacz auto — szczegółowe checkboxy -->
+        <div class="check-grid-1" id="odkurz-wwa-extra" style="display:none">
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Opróżnienie zbiornika:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Dojechał do stacji ładowania:</span></div>
+          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wykonał całe zadanie:</span></div>
+        </div>
         <div class="check-item" id="tv-open"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Włączenie TV:</span></div>
       </div>
       <!-- PZ only: ścieżki trampolinowe -->
@@ -213,6 +219,7 @@
       <!-- WWA only: Quad + odkurzanie PRO -->
       <div class="check-grid-1" id="sprz-wwa" style="display:none">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Quad:</span></div>
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Stan techniczny Quada: <span class="alert-tag">⚡ ALERT</span></span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzanie PRO:</span></div>
       </div>
 
@@ -1144,6 +1151,10 @@
         <textarea placeholder="Opis / uwagi — Poduszki tygodniowa..."></textarea>
         <div class="photo-upload-btn">📷 Dodaj zdjęcie</div>
       </div>
+      <!-- WWA only: ciśnienie poduszki -->
+      <div class="check-grid-1" id="week-pod-cisnienie-wwa" style="display:none">
+        <div class="check-item"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Ciśnienie poduszki: <span class="alert-tag">⚡ ALERT</span></span></div>
+      </div>
       <div class="info-note" id="week-wwa-poduszka" style="display:none">
         Warszawa: przegląd poduszki BEZ rozbierania w każdy <strong>wtorek</strong>. Pełne otwarcie poduszki — raz na 1-2 miesiące (w checkliście miesięcznej).
       </div>
@@ -2043,6 +2054,8 @@ function switchCity(btn, city) {
 
   // WWA: Quad + odkurzanie PRO (sprzątanie ogólne)
   document.getElementById('sprz-wwa').style.display = city === 'Warszawa' ? 'flex' : 'none';
+  // WWA: odkurzacz auto — szczegółowe checkboxy
+  document.getElementById('odkurz-wwa-extra').style.display = city === 'Warszawa' ? 'flex' : 'none';
   // WWA: liny Happy Climb po nocy
   document.getElementById('happy-wwa-liny').style.display = city === 'Warszawa' ? 'flex' : 'none';
 
@@ -2148,7 +2161,8 @@ function switchCityWeek(btn, city) {
   document.getElementById('week-pajaki').style.display = city === 'Łódź' ? 'flex' : 'none';
   document.getElementById('week-ld-uprzeze').style.display = city === 'Łódź' ? 'block' : 'none';
 
-  // WWA — informacja o cyklu poduszki
+  // WWA — ciśnienie poduszki + informacja o cyklu
+  document.getElementById('week-pod-cisnienie-wwa').style.display = city === 'Warszawa' ? 'flex' : 'none';
   document.getElementById('week-wwa-poduszka').style.display = city === 'Warszawa' ? 'block' : 'none';
 
   // Parkour — tylko PZ
