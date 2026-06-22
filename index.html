@@ -190,6 +190,7 @@
            SPRZĄTANIE OGÓLNE
       ──────────────────────────── -->
       <div class="section-title">Sprzątanie ogólne</div>
+      <!-- Strefa / ogólne — 2 kolumny -->
       <div class="check-grid">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wejście do parku:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wieża / poducha:</span></div>
@@ -198,14 +199,9 @@
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Koszykówka:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Wsady do kosza:</span></div>
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Sprzątanie śmieci:</span></div>
-        <!-- Odkurzacz auto — szczegółowe checkboxy dla wszystkich miast -->
-        <div class="check-grid-1" id="odkurz-wwa-extra">
-          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — opróżnienie zbiornika:</span></div>
-          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — dojechał do stacji ładowania:</span></div>
-          <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — wykonał całe zadanie:</span></div>
-        </div>
         <div class="check-item" id="tv-open"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Włączenie TV:</span></div>
       </div>
+
       <!-- PZ only: ścieżki trampolinowe -->
       <div class="check-grid-1" id="sprz-pz">
         <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Ścieżki trampolinowe (12m):</span></div>
@@ -234,6 +230,14 @@
         <div class="check-item" id="ninja-schody" style="display:none"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Schody:</span></div>
         <div class="check-item" id="ninja-siatki-open"><div class="check-box alert" onclick="toggle(this)"></div><span class="check-label">Sprawdzenie siatek wokół basenu z gąbkami: <span class="alert-tag">⚡ ALERT</span></span></div>
       </div>
+
+      <!-- Odkurzacz auto — na dole sekcji, dla wszystkich miast -->
+      <div class="check-grid-1" id="odkurz-wwa-extra" style="margin-top:4px">
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — opróżnienie zbiornika:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — dojechał do stacji ładowania:</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span class="check-label">Odkurzacz auto — wykonał całe zadanie:</span></div>
+      </div>
+
       <!-- PZ: opis i zdjęcie dla sekcji Sprzątanie ogólne -->
       <div class="pz-zone-note" id="pz-note-sprz" style="display:none">
         <textarea placeholder="Opis / uwagi — Sprzątanie ogólne..."></textarea>
