@@ -1750,12 +1750,27 @@
       <input type="text" id="wyp-stanowisko" class="input-field" placeholder="np. Brygadzista, Manager zmiany...">
     </div>
 
-    <button class="btn-submit" style="width:100%;margin-bottom:8px;border-radius:12px;padding:16px;font-size:16px" onclick="wyslijProtokol()">
+    <button class="btn-submit" style="width:100%;margin-bottom:8px;border-radius:12px;padding:16px;font-size:16px" onclick="wyslijProtokol()" id="wyp-submit-btn">
       Wyślij protokół
     </button>
-    <p style="font-size:11px;color:#64748b;text-align:center;margin-bottom:80px">
+    <p style="font-size:11px;color:#64748b;text-align:center;margin-bottom:8px">
       Alert trafia do managera lokalizacji, Filipa B., Marcina T. i Michała G.
     </p>
+
+    <!-- Ekran potwierdzenia — ukryty do momentu wysłania -->
+    <div id="wyp-success" style="display:none;background:#0d2a1a;border:2px solid #166534;border-radius:14px;padding:20px 16px;margin-bottom:80px;text-align:center">
+      <div style="font-size:36px;margin-bottom:10px">✅</div>
+      <p style="font-size:16px;font-weight:700;color:#4ade80;margin-bottom:6px">Protokół wysłany</p>
+      <p id="wyp-success-time" style="font-size:12px;color:#86efac;margin-bottom:14px"></p>
+      <div style="background:#0a1f12;border-radius:8px;padding:12px;text-align:left">
+        <p style="font-size:11px;color:#4ade80;font-weight:700;margin-bottom:8px">POWIADOMIENIE SLACK WYSŁANO DO:</p>
+        <p id="wyp-success-routing" style="font-size:13px;color:#86efac;line-height:1.8"></p>
+      </div>
+      <p style="font-size:11px;color:#64748b;margin-top:12px">Zachowaj ten ekran jako potwierdzenie lub zrób zrzut ekranu.</p>
+      <button onclick="resetProtokol()" style="margin-top:14px;background:#1e3a5f;border:none;border-radius:10px;padding:10px 24px;color:#60a5fa;font-size:13px;font-weight:600;cursor:pointer">
+        Nowy protokół
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1903,7 +1918,36 @@ function wyslijProtokol() {
     return;
   }
   const routing = WYP_ROUTING[miasto] ? WYP_ROUTING[miasto].osoby : 'manager lokalizacji + Michał G.';
-  alert('Protokół wysłany.\n\nAlert Slack do:\n' + routing + '\n\nSlack IDs (backend): ' + (WYP_ROUTING[miasto] ? WYP_ROUTING[miasto].slackIds.join(', ') : ''));
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('pl-PL') + ' o ' + now.toLocaleTimeString('pl-PL', {hour:'2-digit',minute:'2-digit'});
+
+  // Pokaż ekran potwierdzenia
+  document.getElementById('wyp-success-time').textContent = 'Wysłano ' + timeStr + ' • ' + miasto;
+  document.getElementById('wyp-success-routing').innerHTML = routing.split(', ').map(o => '• ' + o).join('<br>');
+  document.getElementById('wyp-success').style.display = 'block';
+  document.getElementById('wyp-submit-btn').style.display = 'none';
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+function resetProtokol() {
+  // Resetuje formularz i chowa ekran potwierdzenia
+  ['wyp-datetime','wyp-strefa','wyp-osoba','wyp-wiek','wyp-opiekun','wyp-opis','wyp-obrazenia','wyp-dzialania','wyp-swiadkowie','wyp-autor','wyp-stanowisko'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('wyp-miasto').value = '';
+  document.getElementById('wyp-routing').style.display = 'none';
+  document.getElementById('wyp-opiekun-label').style.display = 'none';
+  document.getElementById('wyp-opiekun').style.display = 'none';
+  ['wyp-pelnoletni','wyp-pogotowie','wyp-pp'].forEach(g => {
+    ['tak','nie'].forEach(v => {
+      const b = document.getElementById(g + '-' + v);
+      if (b) { b.classList.remove('tc-active-tak'); b.classList.remove('tc-active-nie'); }
+    });
+  });
+  document.getElementById('wyp-success').style.display = 'none';
+  document.getElementById('wyp-submit-btn').style.display = 'block';
+  window.scrollTo(0, 0);
 }
 
 // Transformuje check-itemy z alertem w UI techniczny (TAK/NIE)
