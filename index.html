@@ -841,9 +841,17 @@
         <textarea class="detail-input" placeholder="Wolne pole — brak alertu..."></textarea>
       </div>
     </div>
-    <div class="bottom-row">
+    <!-- Success screen Zmiany 1 -->
+    <div id="shift1-success" style="display:none;background:#0d2a1a;border:2px solid #166534;border-radius:14px;padding:20px 16px;margin:0 0 12px;text-align:center">
+      <div style="font-size:32px;margin-bottom:8px">✅</div>
+      <div style="font-size:17px;font-weight:700;color:#86efac;margin-bottom:4px">Zmiana 1 zakończona</div>
+      <div id="shift1-success-time" style="font-size:12px;color:#86efac;margin-bottom:16px"></div>
+      <p style="font-size:11px;color:#64748b;margin-bottom:16px">Raport Zmiany 1 zapisany. Zmiana 2 to osobny raport — wypełnij go na początku popołudniowej zmiany.</p>
+      <button class="btn-submit" style="width:100%;border-radius:12px;padding:14px;font-size:15px" onclick="startShift2()">Rozpocznij Zmianę 2 <div class="btn-dot"></div></button>
+    </div>
+    <div class="bottom-row" id="shift1-bottom-row">
       <button class="btn-cancel" onclick="show('p-close')"><div class="btn-dot"></div> Anuluj <div class="btn-dot"></div></button>
-      <button class="btn-submit" onclick="switchShift(2)">Dalej — Zmiana 2 <div class="btn-dot"></div></button>
+      <button class="btn-submit" onclick="zatwierdźZmiane1()">Zatwierdź Zmianę 1 <div class="btn-dot"></div></button>
     </div>
     </div><!-- /shift-1 -->
 
@@ -2185,6 +2193,21 @@ function buildSummary(pageId, summaryId) {
   summaryEl.style.display = 'block';
   summaryEl.scrollIntoView({behavior:'smooth', block:'nearest'});
   return missing.length === 0;
+}
+
+function zatwierdźZmiane1() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('pl-PL', {hour:'2-digit', minute:'2-digit'}) + ' • ' + now.toLocaleDateString('pl-PL');
+  document.getElementById('shift1-success-time').textContent = 'Zapisano ' + timeStr;
+  document.getElementById('shift1-success').style.display = 'block';
+  document.getElementById('shift1-bottom-row').style.display = 'none';
+  document.getElementById('shift1-success').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function startShift2() {
+  switchShift(2);
+  document.getElementById('shift1-success').style.display = 'none';
+  document.getElementById('shift1-bottom-row').style.display = 'flex';
 }
 
 function switchShift(n) {
